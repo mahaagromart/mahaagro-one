@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { useDispatch } from "react-redux";
 import { addToCart } from "../../store/cartslice";
+import Weekly from "../../../public/assets/images/img/weekly.png";
 import img from "../../../public/assets/images/fruitproduct/grape.png";
 import Fooda from "../../../public/assets/images/foodproduct/food-1 (1).svg";
 import Foodb from "../../../public/assets/images/foodproduct/food-1 (2).webp";
@@ -97,11 +98,11 @@ const Banner = () => {
             {/* Bottom Section: Image and Product Columns */}
             <div className="flex p-6 rounded-md shadow-sm mt-4 flex-col md:flex-row">
                 {/* Left Side Image - Online Image */}
-                <div className="w-full md:w-1/3">
-                    <img
-                        src={"https://www.radiustheme.com/demo/wordpress/themes/zilly/wp-content/uploads/2023/12/deal-women.png"}
+                <div className="w-full md:w-1/2">
+                    <Image
+                        src={Weekly}
                         alt="Beverage"
-                        className="w-full h-auto p-4 rounded-md"
+                        className="  rounded-md"
                     />
                 </div>
 
@@ -110,7 +111,7 @@ const Banner = () => {
                     {/* First Column */}
                     <div className='bg-white rounded-lg'>
                         <div className="rounded-md shadow-sm">
-                            <div className="space-y-2 p-6">
+                            <div className="space-y-3 p-6">
                                 <div className="flex items-center justify-between">
                                     <ul className="flex space-x-1">
                                         <li className="bg-gray-200 px-1 py-0.5 rounded">
@@ -119,13 +120,13 @@ const Banner = () => {
                                     </ul>
                                     <FaHeart className="text-red-500 text-lg" />
                                 </div>
-                                <div className="relative">
+                                
                                     <Image
                                         src={img}
                                         alt="Whole Foods Market, Organic Trimmed Green Beans, 12 oz"
-                                        className="w-61 h-[280px] rounded"
+                                        className="w-auto h-[280px] rounded"
                                     />
-                                </div>
+                     
                                 <div>
                                     <h2 className="text-md font-semibold">Fresh Grapes of no.1 quality </h2>
                                     <div className="flex items-center space-x-1">

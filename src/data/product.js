@@ -34,7 +34,7 @@ const productsData = [
         id: 2,
         category_id: 1,
         category: 'Fruits',
-        name: 'Grapes',
+        name: 'Kiwi',
         image: Fruitsb,
         price: {
             original: 150,

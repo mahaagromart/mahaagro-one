@@ -4,7 +4,7 @@ import { setupInterceptors } from './interceptors.js';
 // Set up interceptors to attach token
 
 const api = axios.create({
-    baseURL: "https://35df-152-52-228-70.ngrok-free.app",  // Base URL for your API
+    baseURL: "https://d5c1-152-52-228-70.ngrok-free.app",  // Base URL for your API
 });
 
 // Setting up interceptors for token management
