@@ -1,16 +1,15 @@
 import axios from 'axios';
-import { getAuthToken } from './auth.js';   // Function to get the auth token
+import { getAuthToken } from './auth.js';  
 import { setupInterceptors } from './interceptors.js';
-// Set up interceptors to attach token
+
 
 const api = axios.create({
-    baseURL: "https://35df-152-52-228-70.ngrok-free.app",  // Base URL for your API
+    baseURL: "http://192.168.0.101/api", 
 });
 
-// Setting up interceptors for token management
+
 setupInterceptors(api);
 
-// Function to make requests
 export const makeRequest = async (method, url, data = null) => {
     const authToken = getAuthToken();
     const headers = {

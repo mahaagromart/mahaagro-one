@@ -55,7 +55,7 @@ export default function Home() {
     };
 
     useEffect(() => {
-        console.log(products);
+ 
     }, [products]);
 
     const productContainerRef = useRef(null);

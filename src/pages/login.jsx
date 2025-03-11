@@ -58,6 +58,7 @@ export default function Signin() {
           EmailId: formData.email,
           Password: formData.password
         })
+        console.log(data)
       }catch (error) {
         swal('Error', 'Network Error', 'error');
       } 
