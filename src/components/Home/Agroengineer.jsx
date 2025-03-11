@@ -1,5 +1,6 @@
 "use client";
 import Image from "next/image";
+import Link from 'next/link';
 import { useState, useRef } from 'react';
 import Agroengineera from "../../../public/assets/images/Agroengineer/agro (1).webp";
 import Agroengineerb from "../../../public/assets/images/Agroengineer/agro (2).webp";
@@ -192,106 +193,117 @@ export default function Home() {
 
     return (
         <div className="container mx-auto p-4 font-poppins">
-            <div className="flex justify-between items-center mb-4">
-                <h1 className="text-2xl font-bold">Agro-engineer Product</h1>
-                <a href="#" className="flex items-center text-green-700 hover:text-green-900">
-                    View All <FaArrowRight className="ml-2" />
-                </a>
-            </div>
-            <div className="relative">
-                <button
-                    className="absolute top-1/2 left-0 transform -translate-y-1/2 bg-white border border-gray-300 rounded-full p-2 shadow-lg z-10 opacity-60"
-                    onClick={() => productContainerRef.current.scrollBy({ left: -300, behavior: 'smooth' })}
-                >
-                    <FaArrowLeft />
-                </button>
-                <div
-                    className="flex overflow-x-auto scrollbar-hide"
-                    ref={productContainerRef}
-                    onMouseDown={startDragging}
-                    onMouseUp={stopDragging}
-                    onMouseLeave={stopDragging}
-                    onMouseMove={handleMouseMove}
-                >
-                    {products.map((product) => (
-                        <div
-                            key={product.id}
-                            className="flex-none w-64 transition-all duration-300 transform hover:scale-105 hover:shadow-lg border border-gray-200 rounded-lg overflow-hidden relative mr-4"
-                        >
-                            <div className="absolute top-0 left-0 bg-gray-200 text-xs font-semibold text-gray-700 p-4">
-                                {product.category}
-                            </div>
-                            <div className="flex items-center justify-between p-4">
-                                <FaHeart className="text-red-500 ml-auto text-xl" />
-                            </div>
-                            <div className="p-4">
-                                <Image
+        <div className="flex justify-between items-center mb-4">
+            <h1 className="text-xl md:text-2xl font-bold">Agroengineeer product </h1>
+            <Link href="#" className="flex items-center text-green-700 hover:text-green-900">
+                View All <FaArrowRight className="ml-2" />
+            </Link>
+        </div>
+        <div className="relative">
+            <button
+                className="absolute top-1/2 left-0 transform -translate-y-1/2 bg-white border border-gray-300 rounded-full p-2 shadow-lg z-10 opacity-60"
+                onClick={() => productContainerRef.current.scrollBy({ left: -300, behavior: 'smooth' })}
+            >
+                <FaArrowLeft />
+            </button>
+            <div
+                className="flex overflow-x-auto scrollbar-hide"
+                ref={productContainerRef}
+                onMouseDown={startDragging}
+                onMouseUp={stopDragging}
+                onMouseLeave={stopDragging}
+                onMouseMove={handleMouseMove}
+            >
+                {products.map((product) => (
+                    <div
+                        key={product.id}
+                        className="flex-none w-40 sm:w-50 md:w-64 transition-all duration-300 transform hover:scale-105 hover:shadow-lg border border-gray-200 rounded-lg overflow-hidden relative mr-4"
+
+                    >
+                        <div className="absolute top-0 left-0 bg-gray-200 text-xs font-semibold text-gray-700 p-2 md:p-4">
+                            {product.category}
+                        </div>
+                        <div className="flex items-center justify-between p-2 md:p-4">
+                            <FaHeart
+                                className="text-red-400 ml-auto text-xl cursor-pointer hover:text-red-600 transition-all duration-300 ease-in-out"
+                                onClick={() => handleAddToWishList(product)}
+                            />
+                        </div>
+                        <div className="p-2 md:p-4">
+                            <Link href={{
+                                pathname: '/productViewPage',
+                                query: { productId: product.id }
+                            }} className="group">
+                                   <Image
                                     src={product.image}
                                     alt={product.name}
                                     className="w-[200px] h-[200px] p-4  transition-transform duration-500 transform group-hover:scale-105"
                                 />
-                                <div className="mt-3">
-                                    <div className="flex gap-2 mt-2">
-                                        {product.weights.map((weight) => (
-                                            <button
-                                                key={weight.label}
-                                                onClick={() => handleWeightChange(weight, product.id)}
-                                                className={`px-3 py-1 rounded-full border text-xs ${product.selectedWeight.label === weight.label
-                                                    ? 'bg-green-700 text-white'
-                                                    : 'bg-green-200'
-                                                    }`}
-                                            >
-                                                {weight.label}
-                                            </button>
-                                        ))}
-                                    </div>
-                                </div>
-                                <div className="mt-4">
-                                    <div className="flex justify-between items-center mt-2">
-                                        <span className="text-sm font-bold text-green-700">₹{product.selectedWeight.discountedPrice}</span>
-                                        <span className="text-xs text-gray-500 line-through">₹{product.selectedWeight.originalPrice}</span>
-                                    </div>
-                                    <h2 className="text-sm font-semibold text-gray-800">
-                                        {product.name}
-                                        {product.discount > 0 && (
-                                            <span className="bg-red-600 text-white text-xs font-bold ml-2 px-1 rounded">
-                                                {product.discount}% OFF
-                                            </span>
-                                        )}
-                                    </h2>
-                                    <div className="text-xs text-gray-500 mt-1">({product.reviews} reviews)</div>
-                                </div>
-                                <div className="flex items-center mt-2">
-                                    <span className="text-yellow-500 text-xs">{renderStars(product.rating)}</span>
-                                </div>
-                                <div className="mt-3">
-                                    <button
-                                        onClick={() => handleAddToCart(product)}
-                                        className="w-full bg-green-500 text-white py-2 rounded-md hover:bg-green-600 transition duration-300"
-                                    >
-                                        Add to Cart
-                                    </button>
+                            </Link>
+                            <div className="mt-3">
+                                <div className="flex gap-1 md:gap-2 mt-2">
+                                    {product.weights.map((weight) => (
+                                        <button
+                                            key={weight.label}
+                                            onClick={() => handleWeightChange(weight, product.id)}
+                                            className={`px-2 py-1 text-xs md:px-3 md:py-1 rounded-full border ${product.selectedWeight.label === weight.label
+                                                ? 'bg-green-700 text-white'
+                                                : 'bg-green-200'
+                                                }`}
+                                        >
+                                            {weight.label}
+                                        </button>
+                                    ))}
                                 </div>
                             </div>
+                            <div className="mt-4">
+                                <div className="flex justify-between items-center mt-2">
+                                    <span className="text-xs md:text-sm font-bold text-green-700">₹{product.selectedWeight.discountedPrice}</span>
+                                    <span className="text-xs text-gray-500 line-through">₹{product.selectedWeight.originalPrice}</span>
+                                </div>
+                                <h2 className="text-xs md:text-sm font-semibold text-gray-800">
+                                    <Link href={`/product/${product.id}`}>
+                                        {product.name}
+                                    </Link>
+                                    {product.discount > 0 && (
+                                        <span className="bg-red-600 text-white text-xs font-bold ml-2 px-1 rounded">
+                                            {product.discount}% OFF
+                                        </span>
+                                    )}
+                                </h2>
+                                <div className="text-xs text-gray-500 mt-1">({product.reviews} reviews)</div>
+                            </div>
+                            <div className="flex items-center mt-2">
+                                <span className="text-yellow-500 text-xs">{renderStars(product.rating)}</span>
+                            </div>
+                            <div className="mt-3">
+                                <button
+                                    onClick={() => handleAddToCart(product)}
+                                    className="w-full bg-green-500 text-white py-1 md:py-2 rounded-md hover:bg-green-600 transition duration-300"
+                                >
+                                    Add to Cart
+                                </button>
+                            </div>
                         </div>
-                    ))}
-                </div>
-                <button
-                    className="absolute top-1/2 right-0 transform -translate-y-1/2 bg-white border border-gray-300 rounded-full p-2 shadow-lg z-10 opacity-60"
-                    onClick={() => productContainerRef.current.scrollBy({ left: 300, behavior: 'smooth' })}
-                >
-                    <FaArrowRight />
-                </button>
+                    </div>
+                ))}
             </div>
-            <style jsx>{`
-                .scrollbar-hide::-webkit-scrollbar {
-                    display: none;
-                }
-                .scrollbar-hide {
-                    -ms-overflow-style: none;  /* IE and Edge */
-                    scrollbar-width: none;  /* Firefox */
-                }
-            `}</style>
+            <button
+                className="absolute top-1/2 right-0 transform -translate-y-1/2 bg-white border border-gray-300 rounded-full p-2 shadow-lg z-10 opacity-60"
+                onClick={() => productContainerRef.current.scrollBy({ left: 300, behavior: 'smooth' })}
+            >
+                <FaArrowRight />
+            </button>
         </div>
+        <style jsx>{`
+            .scrollbar-hide::-webkit-scrollbar {
+                display: none;
+            }
+            .scrollbar-hide {
+                -ms-overflow-style: none;  /* IE and Edge */
+                scrollbar-width: none;  /* Firefox */
+            }
+        `}</style>
+    </div>
     );
 }

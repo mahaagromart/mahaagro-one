@@ -1,5 +1,6 @@
 "use client";
 import Image from "next/image";
+import Link from 'next/link';
 import { useState, useRef } from 'react';
 import { useDispatch } from "react-redux";
 import { addToCart } from "../../store/cartslice";
@@ -193,10 +194,10 @@ export default function Home() {
     return (
         <div className="container mx-auto p-4 font-poppins">
             <div className="flex justify-between items-center mb-4">
-                <h1 className="text-2xl font-bold">Food Product</h1>
-                <a href="#" className="flex items-center text-green-700 hover:text-green-900">
+                <h1 className="text-xl md:text-2xl font-bold">Food Product</h1>
+                <Link href="#" className="flex items-center text-green-700 hover:text-green-900">
                     View All <FaArrowRight className="ml-2" />
-                </a>
+                </Link>
             </div>
             <div className="relative">
                 <button
@@ -216,27 +217,36 @@ export default function Home() {
                     {products.map((product) => (
                         <div
                             key={product.id}
-                            className="flex-none w-64 transition-all duration-300 transform hover:scale-105 hover:shadow-lg border border-gray-200 rounded-lg overflow-hidden relative mr-4"
+                            className="flex-none w-40 sm:w-50 md:w-64 transition-all duration-300 transform hover:scale-105 hover:shadow-lg border border-gray-200 rounded-lg overflow-hidden relative mr-4"
+
                         >
-                            <div className="absolute top-0 left-0 bg-gray-200 text-xs font-semibold text-gray-700 p-4">
+                            <div className="absolute top-0 left-0 bg-gray-200 text-xs font-semibold text-gray-700 p-2 md:p-4">
                                 {product.category}
                             </div>
-                            <div className="flex items-center justify-between p-4">
-                                <FaHeart className="text-red-500 ml-auto text-xl" />
+                            <div className="flex items-center justify-between p-2 md:p-4">
+                                <FaHeart
+                                    className="text-red-400 ml-auto text-xl cursor-pointer hover:text-red-600 transition-all duration-300 ease-in-out"
+                                    onClick={() => handleAddToWishList(product)}
+                                />
                             </div>
-                            <div className="p-4">
-                                <Image
+                            <div className="p-2 md:p-4">
+                                <Link href={{
+                                    pathname: '/productViewPage',
+                                    query: { productId: product.id }
+                                }} className="group">
+                                      <Image
                                     src={product.image}
                                     alt={product.name}
                                     className="w-[200px] h-[200px] p-4  transition-transform duration-500 transform group-hover:scale-105"
                                 />
+                                </Link>
                                 <div className="mt-3">
-                                    <div className="flex gap-2 mt-2">
+                                    <div className="flex gap-1 md:gap-2 mt-2">
                                         {product.weights.map((weight) => (
                                             <button
                                                 key={weight.label}
                                                 onClick={() => handleWeightChange(weight, product.id)}
-                                                className={`px-3 py-1 rounded-full border text-xs ${product.selectedWeight.label === weight.label
+                                                className={`px-2 py-1 text-xs md:px-3 md:py-1 rounded-full border ${product.selectedWeight.label === weight.label
                                                     ? 'bg-green-700 text-white'
                                                     : 'bg-green-200'
                                                     }`}
@@ -248,11 +258,13 @@ export default function Home() {
                                 </div>
                                 <div className="mt-4">
                                     <div className="flex justify-between items-center mt-2">
-                                        <span className="text-sm font-bold text-green-700">₹{product.selectedWeight.discountedPrice}</span>
+                                        <span className="text-xs md:text-sm font-bold text-green-700">₹{product.selectedWeight.discountedPrice}</span>
                                         <span className="text-xs text-gray-500 line-through">₹{product.selectedWeight.originalPrice}</span>
                                     </div>
-                                    <h2 className="text-sm font-semibold text-gray-800">
-                                        {product.name}
+                                    <h2 className="text-xs md:text-sm font-semibold text-gray-800">
+                                        <Link href={`/product/${product.id}`}>
+                                            {product.name}
+                                        </Link>
                                         {product.discount > 0 && (
                                             <span className="bg-red-600 text-white text-xs font-bold ml-2 px-1 rounded">
                                                 {product.discount}% OFF
@@ -267,7 +279,7 @@ export default function Home() {
                                 <div className="mt-3">
                                     <button
                                         onClick={() => handleAddToCart(product)}
-                                        className="w-full bg-green-500 text-white py-2 rounded-md hover:bg-green-600 transition duration-300"
+                                        className="w-full bg-green-500 text-white py-1 md:py-2 rounded-md hover:bg-green-600 transition duration-300"
                                     >
                                         Add to Cart
                                     </button>

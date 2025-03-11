@@ -268,3 +268,21 @@ body {
   stroke-width: 6px; /* Optionally increase the stroke width on hover */
 }
 
+/* swiper */
+.custom-swiper .swiper-pagination {
+  position: relative;
+  margin-top: 12px; /* Adjust the gap as needed */
+}
+
+.custom-swiper .swiper-pagination-bullet {
+  width: 10px;
+  height: 10px;
+  background-color: #000; /* Customize bullet color */
+  opacity: 0.5;
+  margin: 0 5px;
+}
+
+.custom-swiper .swiper-pagination-bullet-active {
+  opacity: 1;
+  background-color: #000; /* Customize active bullet color */
+}
