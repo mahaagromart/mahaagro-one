@@ -98,11 +98,11 @@ const Banner = () => {
             {/* Bottom Section: Image and Product Columns */}
             <div className="flex p-6 rounded-md shadow-sm mt-4 flex-col md:flex-row">
                 {/* Left Side Image - Online Image */}
-                <div className="w-full md:w-1/2">
+                <div className="w-full md:w-1/2 ">
                     <Image
                         src={Weekly}
                         alt="Beverage"
-                        className="  rounded-md"
+                        className="  rounded-md md:h-[470px] md:mt-2"
                     />
                 </div>
 
@@ -124,11 +124,11 @@ const Banner = () => {
                                     <Image
                                         src={img}
                                         alt="Whole Foods Market, Organic Trimmed Green Beans, 12 oz"
-                                        className="w-auto h-[280px] rounded"
+                                        className="w-auto h-[280px] md:[160px] rounded"
                                     />
                      
                                 <div>
-                                    <h2 className="text-md font-semibold">Fresh Grapes of no.1 quality </h2>
+                                    <h2 className="text-md font-semibold">Fresh Grapes  </h2>
                                     <div className="flex items-center space-x-1">
                                         <span className="text-green-500 font-bold text-sm">₹3.00 - ₹8.00</span>
                                         <span className="bg-red-500 text-white px-1 py-0.5 rounded text-xs">-77%</span>
@@ -147,63 +147,63 @@ const Banner = () => {
 
                     {/* Second Column */}
                     <div className="space-y-2">
-                        <div className="relative flex items-start p-3 space-x-2 bg-white rounded-lg">
-                            <Image
-                                src={Fooda}
-                                alt="Delicious Lay’s Potato Chips, Classic, 8 oz Bag"
-                                className="w-1/3 h-[130px] rounded"
-                            />
-                            <div className="flex-1">
-                                <h2 className="text-md font-semibold">Chiliiy Powder</h2>
-                                <div className="flex items-center space-x-1">
-                                    <span className="line-through text-gray-500 text-sm">₹21.00</span>
-                                    <span className="text-green-500 font-bold text-sm">₹12.00</span>
-                                </div>
-                                <div className="flex items-center space-x-1 mt-1">
-                                    <span className="text-yellow-500 text-sm">★★★★☆</span>
-                                    <span className="text-sm">(4.00)</span>
-                                </div>
-                                <div className="flex space-x-1 mt-2">
-                                    <button className="bg-green-500 text-white px-2 py-1 rounded text-sm" onClick={() => handleAddToCart({ name: 'Chiliiy Powder', img: Fooda, selectedWeight: { label: '200g', discountedPrice: 12, originalPrice: 21 } })}>Add to Cart</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="relative flex items-start p-3 space-x-2 bg-white rounded-lg">
+                        <div className="relative flex items-start p-3 space-x-3 bg-white rounded-lg">
                             <Image
                                 src={Foodb}
                                 alt="Delicious Lay’s Potato Chips, Classic, 8 oz Bag"
                                 className="w-1/3 h-[130px] rounded"
                             />
                             <div className="flex-1">
-                                <h2 className="text-md font-semibold">Kanda Lasun..</h2>
+                                <h2 className="text-md font-semibold">Chiliiy..</h2>
                                 <div className="flex items-center space-x-1">
                                     <span className="line-through text-gray-500 text-sm">₹21.00</span>
-                                    <span className="text-green-500 font-bold text-sm">₹12.00</span>
                                 </div>
+                                <span className="text-green-500 font-bold text-sm">₹12.00</span>
                                 <div className="flex items-center space-x-1 mt-1">
-                                    <span className="text-yellow-500 text-sm">★★★★☆</span>
-                                    <span className="text-sm">(4.00)</span>
+                                    <span className="text-yellow-500 text-sm">★★★☆</span>
+                                    <span className="text-sm">4.6</span>
+                                </div>
+                                <div className="flex space-x-1 mt-2">
+                                    <button className="bg-green-500 text-white px-2 py-1  rounded text-sm" onClick={() => handleAddToCart({ name: 'Chiliiy Powder', img: Fooda, selectedWeight: { label: '200g', discountedPrice: 12, originalPrice: 21 } })}>Add to Cart</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="relative flex items-start p-3 space-x-3 bg-white rounded-lg">
+                            <Image
+                                src={Foodb}
+                                alt="Delicious Lay’s Potato Chips, Classic, 8 oz Bag"
+                                className="w-1/3 h-[130px] rounded"
+                            />
+                            <div className="flex-1">
+                                <h2 className="text-md font-semibold">Kanda..</h2>
+                                <div className="flex items-center space-x-1">
+                                    <span className="line-through text-gray-500 text-sm">₹21.00</span>
+                                </div>
+                                <span className="text-green-500 font-bold text-sm">₹12.00</span>
+                                <div className="flex items-center space-x-1 mt-1">
+                                <span className="text-yellow-500 text-sm">★★★☆</span>
+                                <span className="text-sm">4.6</span>
                                 </div>
                                 <div className="flex space-x-1 mt-2">
                                     <button className="bg-green-500 text-white px-2 py-1 rounded text-sm" onClick={() => handleAddToCart({ name: 'Kanda Lasun', img: Foodb, selectedWeight: { label: '200g', discountedPrice: 12, originalPrice: 21 } })}>Add to Cart</button>
                                 </div>
                             </div>
                         </div>
-                        <div className="relative flex items-start p-3 space-x-2 bg-white rounded-lg">
+                        <div className="relative flex items-start p-3 space-x-3 bg-white rounded-lg">
                             <Image
                                 src={Foodc}
                                 alt="Delicious Lay’s Potato Chips, Classic, 8 oz Bag"
                                 className="w-1/3 h-[130px] rounded"
                             />
                             <div className="flex-1">
-                                <h2 className="text-md font-semibold">Chiwda Masala</h2>
+                                <h2 className="text-md font-semibold">Chiwda..</h2>
                                 <div className="flex items-center space-x-1">
                                     <span className="line-through text-gray-500 text-sm">₹21.00</span>
-                                    <span className="text-green-500 font-bold text-sm">₹12.00</span>
                                 </div>
+                                <span className="text-green-500 font-bold text-sm">₹12.00</span>
                                 <div className="flex items-center space-x-1 mt-1">
-                                    <span className="text-yellow-500 text-sm">★★★★☆</span>
-                                    <span className="text-sm">(4.00)</span>
+                                <span className="text-yellow-500 text-sm">★★★☆</span>
+                                <span className="text-sm">4.6</span>
                                 </div>
                                 <div className="flex space-x-1 mt-2">
                                     <button className="bg-green-500 text-white px-2 py-1 rounded text-sm" onClick={() => handleAddToCart({ name: 'Chiwda Masala', img: Foodc, selectedWeight: { label: '200g', discountedPrice: 12, originalPrice: 21 } })}>Add to Cart</button>
@@ -214,63 +214,63 @@ const Banner = () => {
 
                     {/* Third Column */}
                     <div className="space-y-2">
-                        <div className="relative flex items-start p-3 space-x-2 bg-white rounded-lg">
+                        <div className="relative flex items-start p-3 space-x-3 bg-white rounded-lg">
                             <Image
                                 src={Foodd}
                                 alt="Delicious Lay’s Potato Chips, Classic, 8 oz Bag"
                                 className="w-1/3 h-[130px] rounded"
                             />
                             <div className="flex-1">
-                                <h2 className="text-md font-semibold">Papad Masala</h2>
+                                <h2 className="text-md font-semibold">Papad..</h2>
                                 <div className="flex items-center space-x-1">
                                     <span className="line-through text-gray-500 text-sm">₹21.00</span>
-                                    <span className="text-green-500 font-bold text-sm">₹12.00</span>
                                 </div>
+                                <span className="text-green-500 font-bold text-sm">₹12.00</span>
                                 <div className="flex items-center space-x-1 mt-1">
-                                    <span className="text-yellow-500 text-sm">★★★★☆</span>
-                                    <span className="text-sm">(4.00)</span>
+                                <span className="text-yellow-500 text-sm">★★★☆</span>
+                                <span className="text-sm">4.6</span>
                                 </div>
                                 <div className="flex space-x-1 mt-2">
                                     <button className="bg-green-500 text-white px-2 py-1 rounded text-sm" onClick={() => handleAddToCart({ name: 'Papad Masala', img: Foodd, selectedWeight: { label: '200g', discountedPrice: 12, originalPrice: 21 } })}>Add to Cart</button>
                                 </div>
                             </div>
                         </div>
-                        <div className="relative flex items-start p-3 space-x-2 bg-white rounded-lg">
+                        <div className="relative flex items-start p-3 space-x-3 bg-white rounded-lg">
                             <Image
                                 src={Foode}
                                 alt="Delicious Lay’s Potato Chips, Classic, 8 oz Bag"
                                 className="w-1/3 h-[130px] rounded"
                             />
                             <div className="flex-1">
-                                <h2 className="text-md font-semibold">Kala tikha..</h2>
+                                <h2 className="text-md font-semibold">Kala..</h2>
                                 <div className="flex items-center space-x-1">
                                     <span className="line-through text-gray-500 text-sm">₹21.00</span>
-                                    <span className="text-green-500 font-bold text-sm">₹12.00</span>
                                 </div>
+                                <span className="text-green-500 font-bold text-sm">₹12.00</span>
                                 <div className="flex items-center space-x-1 mt-1">
-                                    <span className="text-yellow-500 text-sm">★★★★☆</span>
-                                    <span className="text-sm">(4.00)</span>
+                                <span className="text-yellow-500 text-sm">★★★☆</span>
+                                <span className="text-sm">4.6</span>
                                 </div>
-                                <div className="flex space-x-1 mt-2">
+                                <div className="flex space-x-1  mt-2">
                                     <button className="bg-green-500 text-white px-2 py-1 rounded text-sm" onClick={() => handleAddToCart({ name: 'Kala tikha', img: Foode, selectedWeight: { label: '200g', discountedPrice: 12, originalPrice: 21 } })}>Add to Cart</button>
                                 </div>
                             </div>
                         </div>
-                        <div className="relative flex items-start p-3 space-x-2 bg-white rounded-lg">
+                        <div className="relative flex items-start p-3 space-x-3 bg-white rounded-lg">
                             <Image
                                 src={Foodf}
                                 alt="Delicious Lay’s Potato Chips, Classic, 8 oz Bag"
                                 className="w-1/3 h-[130px] rounded"
                             />
                             <div className="flex-1">
-                                <h2 className="text-md font-semibold">Chilly Powder pro</h2>
+                                <h2 className="text-md font-semibold">Chilly..</h2>
                                 <div className="flex items-center space-x-1">
                                     <span className="line-through text-gray-500 text-sm">₹21.00</span>
-                                    <span className="text-green-500 font-bold text-sm">₹12.00</span>
                                 </div>
+                                <span className="text-green-500 font-bold text-sm">₹12.00</span>
                                 <div className="flex items-center space-x-1 mt-1">
-                                    <span className="text-yellow-500 text-sm">★★★★☆</span>
-                                    <span className="text-sm">(4.00)</span>
+                                <span className="text-yellow-500 text-sm">★★★☆</span>
+                                <span className="text-sm">4.6</span>
                                 </div>
                                 <div className="flex space-x-1 mt-2">
                                     <button className="bg-green-500 text-white px-2 py-1 rounded text-sm" onClick={() => handleAddToCart({ name: 'Chilly Powder pro', img: Foodf, selectedWeight: { label: '200g', discountedPrice: 12, originalPrice: 21 } })}>Add to Cart</button>
