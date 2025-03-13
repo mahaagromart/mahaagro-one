@@ -119,7 +119,7 @@ const Reviews = () => {
                   onChange={(e) => setNewReview({ ...newReview, rating: Number(e.target.value) })}
                   className="mt-1 block w-full border border-gray-300 rounded-md p-3 focus:ring-indigo-500 focus:border-indigo-500 shadow-sm"
                 >
-                  {[1, 2, 3, 4, 5].map((star) => (
+                  {[5, 4, 3, 1,].map((star) => (
                     <option key={star} value={star}>
                       {star} Star{star > 1 ? "s" : ""}
                     </option>
