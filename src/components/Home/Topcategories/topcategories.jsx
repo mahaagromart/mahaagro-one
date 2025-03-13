@@ -20,7 +20,7 @@ import Service from "../../../../public/assets/images/hometopcategoryicon/homeca
 import Herbal from "../../../../public/assets/images/hometopcategoryicon/homecategorytwo/herbal.svg";
 import Art from "../../../../public/assets/images/hometopcategoryicon/homecategorytwo/artandcraft.svg";
 import Fruits from "../../../../public/assets/images/hometopcategoryicon/homecategorytwo/fruits.svg";
-import { useSelector } from "react-redux";
+
 
 
 
@@ -55,8 +55,7 @@ const CategorySection = () => {
 
     if(response.message=="SUCCESS" && response.retval=="SUCCESS"){
     setCategoryData(response.categoryList.$values)
-    console.log(setCategoryData)
-    console.log(response.categoryList.$values);
+
 
     }
     
@@ -71,11 +70,8 @@ const CategorySection = () => {
 useEffect(() => {
   
   GetAllCategory();
-  console.log(Categorydata)
 
-  Categorydata.map((categories,key)=>(
-    console.log(categories,key)
-  ))
+
 
 }, []); 
   return (
@@ -94,7 +90,7 @@ useEffect(() => {
               {/* Circular Image */}
               <div className="flex justify-center">
               <img
-              src={`http://192.168.0.101/api${category.image}`}
+              src={`http://172.26.64.1/api${category.image}`}
               alt={category.category_Name}
               width="80"
               height="80"

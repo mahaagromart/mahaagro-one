@@ -4,7 +4,8 @@ import { setupInterceptors } from './interceptors.js';
 
 
 const api = axios.create({
-    baseURL: "http://192.168.0.101/api", 
+  // baseURL: "http://192.168.0.102/api", 
+     baseURL:"http://localhost:5136/",
 });
 
 
@@ -26,6 +27,6 @@ export const makeRequest = async (method, url, data = null) => {
         });
         return response.data;
     } catch (error) {
-        throw new Error(error.response ? error.response.data : error.message);
+       console.log(error)
     }
 };
