@@ -13,7 +13,7 @@ import { useRouter } from "next/router"; // For Next.js 12/13 Pages Router
 export default function Home() {
   const dispatch = useDispatch();
   const router = useRouter();
-  const { category_id } = router.query; // Extract category_id from URL query (e.g., /?category_id=123)
+  const { category_id } = router.query; 
   const [cart, setCart] = useState([]);
   const [wishlist, setWishlist] = useState([]);
   const [products, setProducts] = useState([]);

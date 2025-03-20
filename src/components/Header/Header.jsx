@@ -6,7 +6,7 @@ import { BiMenuAltLeft } from "react-icons/bi";
 import { FaHeart, FaShoppingCart, FaUser } from 'react-icons/fa';
 import BottomNavBar from './Bottommenu';
 // import { FaCodeCompare } from "react-icons/fa6";
-import { useState } from 'react';
+import { useState ,useEffect} from 'react';
 import { useSelector } from 'react-redux';
 import Topbar from '../Header/Topbar';
 import Navbar from '../Header/Navbar';
@@ -28,6 +28,8 @@ import Art from '../../../public/assets/images/hometopcategoryicon/arts.svg';
 import Packing from '../../../public/assets/images/hometopcategoryicon/packing.svg';
 import Plasticulture from '../../../public/assets/images/hometopcategoryicon/plasticulture.svg';
 import Fruits from '../../../public/assets/images/hometopcategoryicon/fruits.svg';
+import { makeRequest } from "@/api";
+
 
 
 // Categories array with image paths fixed
@@ -54,6 +56,8 @@ const categories = [
 
 
 const Header = () => {
+    const [Categorydata,setCategoryData]=useState([]) //To store Catgegory List
+  
     
     const [searchQuery, setSearchQuery] = useState(""); // State for search query
     const [isCategoryOpen, setIsCategoryOpen] = useState(false); // State for category dropdown visibility
@@ -67,6 +71,44 @@ const Header = () => {
         setSearchQuery(e.target.value);
     };
     var user = useSelector((state) => state.auth.isAuthenicated);
+
+    //fetching All Top Category
+
+      const GetAllCategory = async () => {
+    
+    
+        try {
+          const storedToken = localStorage.getItem("authToken");
+          const response = await makeRequest("POST", "/Category/GetAllCategory", {
+          headers: { Authorization: `Bearer ${storedToken}` },
+          });
+    
+
+        if(response.message=="SUCCESS" && response.retval=="SUCCESS"){
+      
+        setCategoryData(response.categoryList.$values)
+    
+    
+        }
+        
+      } catch (error) {
+          console.error("Unexpected error fetching categories:", error);
+        
+        }
+      };
+      
+    
+    
+    useEffect(() => {
+
+      
+      GetAllCategory();
+      
+     
+ 
+    
+    
+    }, []); 
     return (
         <div>
             {/* Topbar */}
@@ -91,13 +133,14 @@ const Header = () => {
                         </button>
                         <div className={`dropdown-menu ${isCategoryOpen ? "open" : ""}`}>
                             <ul>
-                                {categories.map((category, index) => (
+                                {Categorydata.map((category, index) => (
                                     <li key={index} className="dropdown-item">
                                         {/* Conditionally render image only if category has an image */}
+                          
                                         {category.image && (
-                                            <Image src={category.image} width={40} height={40} alt={category.name} className="category-image" />
+                                            <Image src={`${process.env.NEXT_PUBLIC_IMAGE_API_URL}${category.image}`} width={40} height={40} alt={category.category_Name} className="category-image" />
                                         )}
-                                        <a href={category.link} aria-label={category.name} className='bottom'>{category.name}</a>
+                                        <a href={`/Category?category_id=${category.category_id}`} className='bottom'>{category.category_Name}</a>
                                     </li>
                                 ))}
                             </ul>

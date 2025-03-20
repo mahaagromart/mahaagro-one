@@ -27,7 +27,7 @@ const Home = () => {
                 return;
             }
     
-            const response = await makeRequest("GET", "/Banner/GetAllBanner", {
+            const response = await makeRequest("POST", "/Banner/GetAllBanner", {
                 headers: { Authorization: `Bearer ${storedToken}` },
             });
     

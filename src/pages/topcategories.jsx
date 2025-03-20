@@ -178,6 +178,7 @@ const CategorySection = () => {
             <div key={index} className="relative text-center group">
               {/* Circular Image */}
               <div className="flex justify-center">
+                {category.image}
                 <Image
                   src={category.image}
                   alt={category.name}

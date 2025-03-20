@@ -48,7 +48,7 @@ const CategorySection = () => {
 
     try {
       const storedToken = localStorage.getItem("authToken");
-      const response = await makeRequest("GET", "/Category/GetAllCategory", {
+      const response = await makeRequest("POST", "/Category/GetAllCategory", {
       headers: { Authorization: `Bearer ${storedToken}` },
       });
 
@@ -90,7 +90,7 @@ useEffect(() => {
               {/* Circular Image */}
               <div className="flex justify-center">
               <img
-              src={`http://172.26.64.1/api${category.image}`}
+              src={`http://localhost:5136/${category.image}`}
               alt={category.category_Name}
               width="80"
               height="80"
