@@ -918,275 +918,205 @@
 
 
 
-//NEW DESIGN
 
 
 // "use client";
-// import Link from 'next/link';
-// import  Banner from "../../public/assets/images/banner/Shopnow.svg"
-// import { useState, useEffect } from 'react';
-// import { useDispatch } from 'react-redux';
+// import Banner from "../../public/assets/images/banner/Shopnow.svg";
+// import { useState, useEffect } from "react";
+// import { useDispatch } from "react-redux";
 // import { addToCart } from "../store/cartslice";
 // import { addToWishList } from "../store/wishlistSlice.js";
-// import ProductList from '../components/Home/fruitstwo';
-// // import productsData from '../data/product';
-// import { useRouter } from 'next/router';
+// import { useRouter } from "next/router";
 // import { makeRequest } from "@/api";
-// import swal from 'sweetalert';
-// import { TbCircleLetterG } from 'react-icons/tb';
-// // import { endpointClientChangedSubscribe } from 'next/dist/build/swc/generated-native';
-
+// import swal from "sweetalert";
+// import Image from "next/image";
 
 // const CategoryPage = () => {
-//     const [currentPage, setCurrentPage] = useState(1);
-//     const [cartItems, setCartItems] = useState([]);
-//     const [wishlist, setWishlist] = useState([]);
-//     const [priceRange, setPriceRange] = useState([0, 500]);
-//     const [selectedCategories, setSelectedCategories] = useState([]);
-//     const [selectedStatus, setSelectedStatus] = useState([]);
-//     const [sortBy, setSortBy] = useState('latest');
 //     const [products, setProducts] = useState([]);
-//     const itemsPerPage = 6;
 //     const router = useRouter();
 //     const dispatch = useDispatch();
-//     const { category_id } = router.query;
+//     const imageBaseUrl = process.env.NEXT_PUBLIC_IMAGE_API_URL || "http://localhost:5136";
 
-
-
-
- 
-//     const handleWeightChange = (weight, productId) => {
-//         setProducts(products.map(product => {
-//             if (product.id === productId) {
-//                 return {
-//                     ...product,
-//                     selectedWeight: weight
-//                 };
+//     // Function to de-duplicate variants and group images
+//     const formatVariants = (variants) => {
+//         const variantMap = new Map();
+//         variants.$values.forEach((variant) => {
+//             const key = variant.varient_Name;
+//             if (variantMap.has(key)) {
+//                 const existing = variantMap.get(key);
+//                 existing.images = [
+//                     ...existing.images,
+//                     ...variant.imageGallery.$values.map((img) => img.product_Images),
+//                 ];
+//             } else {
+//                 variantMap.set(key, {
+//                     ...variant,
+//                     images: variant.imageGallery.$values.map((img) => img.product_Images),
+//                 });
 //             }
-//             return product;
-//         }));
-//     };
-
-//     const handleAddToCart = (product) => {
-//         const productToAdd = {
-//             ...product,
-//             selectedWeight: product.selectedWeight.label,
-//             selectedPrice: product.selectedWeight.discountedPrice,
-//             selectedOriginalPrice: product.selectedWeight.originalPrice,
-//             selectedDiscountedPrice: product.selectedWeight.discountedPrice,
-//         };
-//         setCartItems([...cartItems, productToAdd]);
-//         dispatch(addToCart(productToAdd));
-//         console.log("Added to Cart:", productToAdd); // Optional: for debugging
-//     };
-
-//     const handleAddToWishList = (product) => {
-//         setWishlist([...wishlist, product]);
-//         dispatch(addToWishList(product));
-//         console.log("Added to Wish List:", product); // Optional: for debugging
-//     };
-
-
-
-//     const indexOfLastItem = currentPage * itemsPerPage;
-//     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-//     const currentItems = products.slice(indexOfFirstItem, indexOfLastItem);
-
-//     const handleNextPage = () => {
-//         if (currentPage < Math.ceil(products.length / itemsPerPage)) {
-//             setCurrentPage(currentPage + 1);
-//         }
-//     };
-
-//     const handlePrevPage = () => {
-//         if (currentPage > 1) {
-//             setCurrentPage(currentPage - 1);
-//         }
-//     };
-
-
-//     //fetching product data from api 
-//     const getProductData=async(categoryId)=>{
-        
-//     try {
-//         const storedToken = localStorage.getItem("authToken");
-//         const response = await makeRequest("POST", "/Product/GetProductBycategory", { Id: categoryId }, {
-//             headers: { Authorization: `Bearer ${storedToken}` },
 //         });
+//         return Array.from(variantMap.values());
+//     };
 
-//       if(response[0].message=="SUCCESS" && response[0].retval=="SUCCESS"){
-//         const list= response[0]?.dataset?.$values?.flatMap(product => product.varientList?.$values) || []
-//         console.log(response[0]?.dataset?.$values)
-       
-
-  
-//         setProducts(response[0]?.dataset?.$values);
-
-  
-  
-//       }else if(response[0].message=="FAILURE" && response[0].retval=="FAILURE"){
-//         swal('FAILURE', 'DATA NOT FOUND', 'FAILURE');
-        
-//       }else{
-//         swal('SOMETHING WENT WRONG');
-//       }
-      
-//     } catch (error) {
-//         console.error("UNEXPECTED ERROR FETCHING PRODUCTS:", error.tostring());
-      
-//       }
-
-//     }
+//     // Fetch product data from API
+//     const getProductData = async (categoryId) => {
+//         try {
+//             const storedToken = localStorage.getItem("authToken");
+//             const response = await makeRequest(
+//                 "POST",
+//                 "/Product/GetProductBycategory",
+//                 { Id: categoryId },
+//                 { headers: { Authorization: `Bearer ${storedToken}` } }
+//             );
+//             if (response.status === 0 && response.message === "Product details fetched successfully") {
+//                 const formattedProducts = response.dataset.$values.map((product) => {
+//                     const uniqueVariants = formatVariants(product.variants);
+//                     return {
+//                         ...product,
+//                         varientList: { $values: uniqueVariants },
+//                         selectedVariant: uniqueVariants[0] || null,
+//                     };
+//                 }) || [];
+//                 setProducts(formattedProducts);
+//             } else {
+//                 swal("FAILURE", "DATA NOT FOUND", "error");
+//             }
+//         } catch (error) {
+//             console.error("UNEXPECTED ERROR FETCHING PRODUCTS:", error.toString());
+//             swal("ERROR", "Failed to fetch products", "error");
+//         }
+//     };
 
 //     useEffect(() => {
-//         console.log(products)
-      
-//         const storedCart = localStorage.getItem("products");
-//         if (storedCart) {
-//             const parsedCart = JSON.parse(storedCart);
-        
-//             dispatch(addToCart(parsedCart));
-//             setCartItems(parsedCart); 
+//         if (router.query.category_id) {
+//             getProductData(router.query.category_id);
 //         }
+//     }, [router.query.category_id]);
 
-      
-//     }, [dispatch]); 
+//     const handleAddToCart = (product, e) => {
+//         e.stopPropagation(); // Prevent card click from triggering navigation
+//         if (!product.selectedVariant) return;
+//         dispatch(addToCart(product.selectedVariant));
+//         console.log("Added to Cart:", product.selectedVariant);
+//     };
 
-//     useEffect(()=>{
- 
-//         //  const data=products.varientList.$values.map(el=>console.log(el))
-//         //  console.log(data)
+//     const handleAddToWishList = (product, e) => {
+//         e.stopPropagation(); // Prevent card click from triggering navigation
+//         if (!product.selectedVariant) return;
+//         dispatch(addToWishList(product.selectedVariant));
+//         console.log("Added to Wish List:", product.selectedVariant);
+//     };
 
-        
+//     const handleVariantClick = (productId, variant, e) => {
+//         e.stopPropagation(); // Prevent card click from triggering navigation
+//         setProducts(products.map((product) =>
+//             product.proD_ID === productId ? { ...product, selectedVariant: variant } : product
+//         ));
+//     };
 
-      
-//         if(router.query.category_id){
-//             getProductData(router.query.category_id)
-//         }
-//     },[router.query.category_id])
+//     // Navigate to ProductViewPage with proD_ID as query string
+//     const handleViewProduct = (proD_ID) => {
+//         router.push({
+//             pathname: "/productViewPage",
+//             query: { proD_ID: proD_ID },
+//         });
+//     };
 
 //     return (
-//         <>
-//             <div className="bg-white text-gray-800 min-h-screen flex flex-col">
-//                 <div className="flex-1 container mx-auto py-18 px-4">
-//                     <div className="text-black text-2xl font-semibold mb-3">Category</div>
-                
-//                    <div
-//                         className="w-full h-auto md:h-48 text-white rounded-lg shadow-md flex flex-col md:flex-row justify-center md:justify-between items-center text-center md:text-left p-6 md:p-8 mb-8"
-//                         style={{
-//                             backgroundImage: `url(${Banner.src})`, // Use the imported image
-//                             backgroundSize: 'cover',
-//                             height:'294px',
-//                         }}
-//                     >
-                      
-//                     </div>
+//         <div className="bg-white text-gray-800 min-h-screen flex flex-col">
+//             <div className="container mx-auto py-12 px-4">
+//                 <h2 className="text-black text-2xl font-semibold mb-6 text-center md:text-left">Category</h2>
 
-//                     {/* Product Listing Section */}
-//                     {/* <div className="w-full md:w-2/3">
-//                         <div className="flex justify-between items-center mb-6">
-//                             <div className="text-sm text-gray-600">
-//                                 Showing {indexOfFirstItem + 1}-{Math.min(indexOfLastItem, products.length)} of {products.length} results
-//                             </div>
-
-//                             <div className="flex items-center space-x-4">
-//                                 <select
-//                                     value={sortBy}
-//                                     onChange={(e) => setSortBy(e.target.value)}
-//                                     className="bg-white text-gray-700 p-2 rounded-md border border-gray-300"
-//                                 >
-//                                     <option value="latest">Sort by Latest</option>
-//                                     <option value="price">Sort by Price</option>
-//                                     <option value="popularity">Sort by Popularity</option>
-//                                 </select>
-//                             </div>
-//                         </div>
-
-//                         {/* Product List */}
-//                         <div className=" sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
-//                             {currentItems.length > 0 ? (
-//                                 <ProductList
-//                                     products={currentItems}
-//                                     handleAddToCart={handleAddToCart}
-//                                     handleAddToWishList={handleAddToWishList}
-//                                     handleWeightChange={handleWeightChange}
-//                                 />
-//                             ) : (
-//                                 <div className="text-center col-span-3 text-gray-500">No products found</div>
-//                             )}
-//                         </div>
-
-//                         {/* Pagination */}
-//                         <div className="flex justify-center items-center mt-6 space-x-4">
-//                             <button
-//                                 onClick={handlePrevPage}
-//                                 disabled={currentPage === 1}
-//                                 className="px-4 py-2 bg-gray-300 text-black rounded-md hover:bg-gray-400 transition-colors disabled:opacity-50"
-//                             >
-//                                 &lt; Prev
-//                             </button>
-
-//                             <div className="flex space-x-2">
-//                                 {Array.from({ length: Math.ceil(products.length / itemsPerPage) }, (_, index) => (
-//                                     <button
-//                                         key={index + 1}
-//                                         onClick={() => setCurrentPage(index + 1)}
-//                                         className={`px-4 py-2 rounded-md ${currentPage === index + 1 ? 'bg-green-300 text-black' : 'bg-white text-gray-600 hover:bg-green-200'} transition-colors`}
-//                                     >
-//                                         {index + 1}
-//                                     </button>
-//                                 ))}
-//                             </div>
-
-//                             <button
-//                                 onClick={handleNextPage}
-//                                 disabled={currentPage === Math.ceil(products.length / itemsPerPage)}
-//                                 className="px-4 py-2 bg-gray-300 text-black rounded-md hover:bg-gray-400 transition-colors disabled:opacity-50"
-//                             >
-//                                 Next &gt;
-//                             </button>
-//                         </div>
-//                     {/* </div>  */}
-
-//                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
-//     {products.map((product) => (
-//         <div key={product.productId} className="bg-white p-4 rounded-lg shadow-md">
-//             <h3 className="text-lg font-semibold text-gray-900">{product.varientList?.$values[0]?.productName}</h3>
-            
-//             {product.varientList?.$values.map((variant, index) => (
-//                 <div key={index} className="border p-2 mt-2 rounded-md">
-//                     <img 
-//                         src={variant.images[0]} 
-//                         alt={variant.productName} 
-//                         className="w-full h-40 object-cover rounded-md"
+//                 {/* Banner */}
+//                 <div className="w-full h-72 rounded-lg shadow-md flex flex-col md:flex-row justify-center md:justify-between items-center p-6 md:p-8 mb-8 bg-cover bg-center relative">
+//                     <Image
+//                         src={Banner}
+//                         alt="Shop Now Banner"
+//                         fill
+//                         style={{ objectFit: "cover" }}
+//                         className="rounded-lg"
 //                     />
-//                     <p className="text-gray-700 mt-2">Variant: {variant.varientName}</p>
-//                     <p className="text-gray-900 font-bold">Price: ₹{variant.price}</p>
-
-//                     <button 
-//                         onClick={() => handleAddToCart(variant)} 
-//                         className="mt-2 bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600"
-//                     >
-//                         Add to Cart
-//                     </button>
-//                     <button 
-//                         onClick={() => handleAddToWishList(variant)} 
-//                         className="ml-2 mt-2 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
-//                     >
-//                         Add to Wishlist
-//                     </button>
 //                 </div>
-//             ))}
-//         </div>
-//     ))}
-// </div>
+
+//                 {/* Product Grid */}
+//                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-6">
+//                     {products.length > 0 ? (
+//                         products.map((product) => (
+//                             <div
+//                                 key={product.proD_ID}
+//                                 onClick={() => handleViewProduct(product.proD_ID)} // Entire card is clickable
+//                                 className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col cursor-pointer"
+//                             >
+//                                 <h3 className="text-lg font-semibold text-gray-900 text-center mb-4">
+//                                     {product.selectedVariant?.product_Name}
+//                                 </h3>
+
+//                                 <div className="flex justify-center gap-2 mb-4">
+//                                     {product.selectedVariant?.images.slice(0, 3).map((image, index) => (
+//                                         <div key={index} className="relative w-1/3 h-32">
+//                                             <Image
+//                                                 src={`${imageBaseUrl}${image}`}
+//                                                 alt={`${product.selectedVariant?.product_Name} - Image ${index + 1}`}
+//                                                 fill
+//                                                 style={{ objectFit: "cover" }}
+//                                                 className="rounded-md border border-gray-200"
+//                                                 onError={() => console.error(`Failed to load image: ${imageBaseUrl}${image}`)}
+//                                             />
+//                                         </div>
+//                                     ))}
+//                                 </div>
+
+//                                 <div className="flex justify-center gap-2 mb-4 flex-wrap">
+//                                     {product.varientList?.$values.map((variant) => (
+//                                         <button
+//                                             key={variant.varient_Name}
+//                                             className={`px-4 py-2 rounded-full border text-sm font-medium transition-colors duration-200 ${
+//                                                 product.selectedVariant?.varient_Name === variant.varient_Name
+//                                                     ? "bg-green-500 text-white border-green-500"
+//                                                     : "bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200"
+//                                             }`}
+//                                             onClick={(e) => handleVariantClick(product.proD_ID, variant, e)}
+//                                         >
+//                                             {variant.varient_Name}
+//                                         </button>
+//                                     ))}
+//                                 </div>
+
+//                                 <p className="text-gray-900 font-bold text-center mb-4">
+//                                     Price: ₹{product.selectedVariant?.pricing.sellinG_PRICE}
+//                                     {product.selectedVariant?.pricing.discounT_AMOUNT > 0 && (
+//                                         <span className="text-gray-500 line-through ml-2">
+//                                             ₹{product.selectedVariant?.pricing.maximuM_RETAIL_PRICE}
+//                                         </span>
+//                                     )}
+//                                 </p>
+
+//                                 <div className="flex justify-between gap-4 mt-auto">
+//                                     <button
+//                                         onClick={(e) => handleAddToCart(product, e)}
+//                                         className="flex-1 bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition-colors duration-200 text-sm font-medium"
+//                                     >
+//                                         Add to Cart
+//                                     </button>
+//                                     <button
+//                                         onClick={(e) => handleAddToWishList(product, e)}
+//                                         className="flex-1 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors duration-200 text-sm font-medium"
+//                                     >
+//                                         Add to Wishlist
+//                                     </button>
+//                                 </div>
+//                             </div>
+//                         ))
+//                     ) : (
+//                         <div className="text-center col-span-3 text-gray-500 text-lg">No products found</div>
+//                     )}
 //                 </div>
 //             </div>
-//         </>
+//         </div>
 //     );
-// }
+// };
 
-// export default CategoryPage; 
+// export default CategoryPage;
 
 
 
@@ -1197,40 +1127,66 @@
 
 "use client";
 import Banner from "../../public/assets/images/banner/Shopnow.svg";
-import { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { addToCart } from "../store/cartslice";
 import { addToWishList } from "../store/wishlistSlice.js";
-import { useRouter } from 'next/router';
+import { useRouter } from "next/router";
 import { makeRequest } from "@/api";
-import swal from 'sweetalert';
+import swal from "sweetalert";
+import Image from "next/image";
 
 const CategoryPage = () => {
     const [products, setProducts] = useState([]);
     const router = useRouter();
     const dispatch = useDispatch();
-    const imageBaseUrl = process.env.NEXT_PUBLIC_IMAGE_API_URL;
+    const imageBaseUrl = process.env.NEXT_PUBLIC_IMAGE_API_URL || "http://localhost:5136";
 
-    // Fetch product data from API
+    const formatVariants = (variants) => {
+        const variantMap = new Map();
+        variants.$values.forEach((variant) => {
+            const key = variant.varient_Name;
+            if (variantMap.has(key)) {
+                const existing = variantMap.get(key);
+                existing.images = [
+                    ...existing.images,
+                    ...variant.imageGallery.$values.map((img) => img.product_Images),
+                ];
+            } else {
+                variantMap.set(key, {
+                    ...variant,
+                    images: variant.imageGallery.$values.map((img) => img.product_Images),
+                });
+            }
+        });
+        return Array.from(variantMap.values());
+    };
+
     const getProductData = async (categoryId) => {
         try {
             const storedToken = localStorage.getItem("authToken");
-            const response = await makeRequest("POST", "/Product/GetProductBycategory", { Id: categoryId }, {
-                headers: { Authorization: `Bearer ${storedToken}` },
-            });
-
-            if (response[0].message === "SUCCESS" && response[0].retval === "SUCCESS") {
-                const formattedProducts = response[0]?.dataset?.$values?.map(product => ({
-                    ...product,
-                    selectedVariant: product.varientList?.$values[0] || null // Default to the first variant
-                })) || [];
-                console.log(formattedProducts)
+            const response = await makeRequest(
+                "POST",
+                "/Product/GetProductBycategory",
+                { Id: categoryId },
+                { headers: { Authorization: `Bearer ${storedToken}` } }
+            );
+            if (response.status === 0 && response.message === "Product details fetched successfully") {
+                const formattedProducts = response.dataset.$values.map((product) => {
+                    const uniqueVariants = formatVariants(product.variants);
+                    return {
+                        ...product,
+                        varientList: { $values: uniqueVariants },
+                        selectedVariant: uniqueVariants[0] || null,
+                    };
+                }) || [];
                 setProducts(formattedProducts);
             } else {
-                swal('FAILURE', 'DATA NOT FOUND', 'error');
+                swal("FAILURE", "DATA NOT FOUND", "error");
             }
         } catch (error) {
             console.error("UNEXPECTED ERROR FETCHING PRODUCTS:", error.toString());
+            swal("ERROR", "Failed to fetch products", "error");
         }
     };
 
@@ -1240,89 +1196,130 @@ const CategoryPage = () => {
         }
     }, [router.query.category_id]);
 
-    const handleAddToCart = (product) => {
+    const handleAddToCart = (product, e) => {
+        e.stopPropagation();
         if (!product.selectedVariant) return;
         dispatch(addToCart(product.selectedVariant));
-        console.log("Added to Cart:", product.selectedVariant);
     };
 
-    const handleAddToWishList = (product) => {
+    const handleAddToWishList = (product, e) => {
+        e.stopPropagation();
         if (!product.selectedVariant) return;
         dispatch(addToWishList(product.selectedVariant));
-        console.log("Added to Wish List:", product.selectedVariant);
     };
 
-    const handleVariantClick = (productId, variant) => {
-        setProducts(products.map(product =>
-            product.productId === productId ? { ...product, selectedVariant: variant } : product
+    const handleVariantClick = (productId, variant, e) => {
+        e.stopPropagation();
+        setProducts(products.map((product) =>
+            product.proD_ID === productId ? { ...product, selectedVariant: variant } : product
         ));
     };
 
+    const handleViewProduct = (proD_ID) => {
+        router.push({
+            pathname: "/productViewPage",
+            query: { proD_ID: proD_ID },
+        });
+    };
+
     return (
-        <div className="bg-white text-gray-800 min-h-screen flex flex-col">
-            <div className="container mx-auto py-18 px-4">
-                <div className="text-black text-2xl font-semibold mb-3">Category</div>
+        <div className="bg-gray-50 min-h-screen">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                {/* Header */}
+                <h2 className="text-3xl font-bold text-gray-900 mb-8 tracking-tight">
+                    Explore Our Collection
+                </h2>
 
                 {/* Banner */}
-                <div
-                    className="w-full h-auto md:h-48 rounded-lg shadow-md flex flex-col md:flex-row justify-center md:justify-between items-center p-6 md:p-8 mb-8"
-                    style={{ backgroundImage: `url(${Banner.src})`, backgroundSize: 'cover', height: '294px' }}
-                />
+                <div className="relative w-full h-64 md:h-80 mb-12 rounded-xl overflow-hidden shadow-lg">
+                    <Image
+                        src={Banner}
+                        alt="Shop Now Banner"
+                        fill
+                        style={{ objectFit: "cover" }}
+                        className="transition-transform duration-300 hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center">
+                        <span className="text-white text-2xl md:text-4xl font-semibold tracking-wide">
+                            Shop Now
+                        </span>
+                    </div>
+                </div>
 
                 {/* Product Grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                     {products.length > 0 ? (
                         products.map((product) => (
-                            <div key={product.productId} className="bg-white p-4 rounded-lg shadow-md">
-                                <h3 className="text-lg font-semibold text-gray-900">{product.selectedVariant?.productName}</h3>
-
-                                {/* Image Updates When Variant is Clicked */}
-                                <img 
-                                  src={`${imageBaseUrl}/${product.selectedVariant.images[0]}`}
-                                    // src={product.selectedVariant?.images[0]} 
-                                    alt={product.selectedVariant?.productName} 
-                                    className="w-full h-40 object-cover rounded-md"
-                                />
-
-                                {/* Variant Selection Buttons */}
-                                <div className="flex gap-2 mt-3">
-                                    {product.varientList?.$values.map((variant) => (
+                            <div
+                                key={product.proD_ID}
+                                onClick={() => handleViewProduct(product.proD_ID)}
+                                className="group bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer"
+                            >
+                                {/* Product Image */}
+                                <div className="relative w-full h-64 overflow-hidden object-cover">
+                                    <Image
+                                        src={`${imageBaseUrl}${product.selectedVariant?.images[0]}`}
+                                        alt={product.selectedVariant?.product_Name}
+                                        fill
+                                        className="group-hover:scale-110 transition-transform duration-300 "
+                                        onError={(e) => (e.target.src = "/fallback-image.jpg")}
+                                    />
+                                    {/* Quick Action Buttons */}
+                                    <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex gap-2">
                                         <button
-                                            key={variant.varientName}
-                                            className={`px-3 py-1 rounded-md border ${
-                                                product.selectedVariant?.varientName === variant.varientName
-                                                    ? "bg-green-500 text-white"
-                                                    : "bg-gray-200 text-gray-700"
-                                            }`}
-                                            onClick={() => handleVariantClick(product.productId, variant)}
+                                            onClick={(e) => handleAddToWishList(product, e)}
+                                            className="p-2 bg-white rounded-full shadow-md hover:bg-blue-50"
                                         >
-                                            {variant.varientName}
+                                            <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                            </svg>
                                         </button>
-                                    ))}
+                                    </div>
                                 </div>
 
-                                {/* Price Updates When Variant is Clicked */}
-                                <p className="text-gray-900 font-bold mt-2">Price: ₹{product.selectedVariant?.price}</p>
+                                {/* Product Details */}
+                                <div className="p-4">
+                                    <h3 className="text-lg font-semibold text-gray-900 truncate">
+                                        {product.selectedVariant?.product_Name}
+                                    </h3>
+                                    
+                                    {/* Variants */}
+                                    <div className="flex flex-wrap gap-2 mt-2">
+                                        {product.varientList?.$values.map((variant) => (
+                                            <button
+                                                key={variant.varient_Name}
+                                                onClick={(e) => handleVariantClick(product.proD_ID, variant, e)}
+                                                className={`px-3 py-1 rounded-full text-sm font-medium transition-all duration-200 ${
+                                                    product.selectedVariant?.varient_Name === variant.varient_Name
+                                                        ? "bg-gray-900 text-white"
+                                                        : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                                                }`}
+                                            >
+                                                {variant.varient_Name}
+                                            </button>
+                                        ))}
+                                    </div>
 
-                                {/* Action Buttons */}
-                                <div className="flex gap-2 mt-3">
-                                    <button 
-                                        onClick={() => handleAddToCart(product)} 
-                                        className="flex-1 bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600"
-                                    >
-                                        Add to Cart
-                                    </button>
-                                    <button 
-                                        onClick={() => handleAddToWishList(product)} 
-                                        className="flex-1 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
-                                    >
-                                        Add to Wishlist
-                                    </button>
+                                    {/* Pricing */}
+                                    <div className="mt-3 flex items-center gap-2">
+                                        <span className="text-lg font-bold text-gray-900">
+                                            ₹{product.selectedVariant?.pricing.sellinG_PRICE}
+                                        </span>
+                                        {product.selectedVariant?.pricing.discounT_AMOUNT > 0 && (
+                                            <span className="text-sm text-gray-500 line-through">
+                                                ₹{product.selectedVariant?.pricing.maximuM_RETAIL_PRICE}
+                                            </span>
+                                        )}
+                                    </div>
+
+                                   
                                 </div>
                             </div>
                         ))
                     ) : (
-                        <div className="text-center col-span-3 text-gray-500">No products found</div>
+                        <div className="col-span-full text-center py-12">
+                            <p className="text-gray-500 text-lg">No products available</p>
+                        </div>
                     )}
                 </div>
             </div>
