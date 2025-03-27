@@ -3,8 +3,9 @@ import Image from "next/image";
 import React, { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import MobileBanner from "../../../public/assets/images/Mobilebanner/mbanner.svg";
 import Mobiletwo from "../../../public/assets/images/Mobilebanner/mtwo.svg"; // Ensure Mobiletwo is also imported
-
+import { makeRequest } from '@/api';
 const Carousel = () => {
+    const [BannerDataOne, setBannerOneData] = useState([]);
     const [currentSlide, setCurrentSlide] = useState(0);
     const [isPaused, setIsPaused] = useState(false);
 
@@ -45,7 +46,7 @@ const Carousel = () => {
                 video.currentTime = 0;
             }
         });
-
+ 
         const currentVideo = videoRefs.current[currentSlide];
         if (currentVideo && slides[currentSlide].type === 'video') {
             const playVideo = async () => {

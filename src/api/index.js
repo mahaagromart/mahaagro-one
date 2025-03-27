@@ -2,20 +2,19 @@ import axios from 'axios';
 import { getAuthToken } from './auth.js';  
 import { setupInterceptors } from './interceptors.js';
 
-
+// API instance
 const api = axios.create({
-  // baseURL: "http://192.168.0.102/api", 
-     baseURL:"http://localhost:5136/",
+    baseURL: "http://localhost:5136/",
 });
-
 
 setupInterceptors(api);
 
-export const makeRequest = async (method, url, data = null) => {
+export const makeRequest = async (method, url, data = null, headers = {}) => {
     const authToken = getAuthToken();
-    const headers = {
-        'Authorization': authToken == null ? '' : `Bearer ${authToken}`,
+    const finalHeaders = {
+        Authorization: authToken ? `Bearer ${authToken}` : '',
         'Content-Type': 'application/json',
+        ...headers, // Merge additional headers if provided
     };
 
     try {
@@ -23,10 +22,11 @@ export const makeRequest = async (method, url, data = null) => {
             method,
             url,
             data,
-            headers,
+            headers: finalHeaders,
         });
         return response.data;
     } catch (error) {
-       console.log(error)
+        console.log(error);
+        throw error; // Re-throw the error to handle it in the calling function
     }
 };

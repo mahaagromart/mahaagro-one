@@ -1140,7 +1140,7 @@ const CategoryPage = () => {
     const [products, setProducts] = useState([]);
     const router = useRouter();
     const dispatch = useDispatch();
-    const imageBaseUrl = process.env.NEXT_PUBLIC_IMAGE_API_URL || "http://localhost:5136";
+    // const imageBaseUrl = process.env.NEXT_PUBLIC_IMAGE_API_URL || "http://localhost:5136";
 
     const formatVariants = (variants) => {
         const variantMap = new Map();
@@ -1258,7 +1258,7 @@ const CategoryPage = () => {
                                 {/* Product Image */}
                                 <div className="relative w-full h-64 overflow-hidden object-cover">
                                     <Image
-                                        src={`${imageBaseUrl}${product.selectedVariant?.images[0]}`}
+                                        src={`${process.env.NEXT_PUBLIC_IMAGE_API_URL}${product.selectedVariant?.images[0]}`}
                                         alt={product.selectedVariant?.product_Name}
                                         fill
                                         className="group-hover:scale-110 transition-transform duration-300 "

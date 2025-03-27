@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";``
 import Topbanner from "../components/Home/topbanner"; // Adjusted path
 import Topcategories from "../components/Home/Topcategories/topcategories"; // Adjusted path
 import Fruitcategory from "@/components/Home/fruits"; // Adjusted path
@@ -26,6 +27,23 @@ import Testimonial from "@/components/Home/Testimonial";
 import Bannereleven from "@/components/Home/All-banner/bannereleven";
 
 export default function Home() {
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  useEffect(() => {
+    if (isChatOpen) {
+      var Tawk_API = Tawk_API || {},
+        Tawk_LoadStart = new Date();
+      (function () {
+        var s1 = document.createElement("script"),
+          s0 = document.getElementsByTagName("script")[0];
+        s1.async = true;
+        s1.src = "https://embed.tawk.to/67da5759123ff2191266d37e/1immeae3l";
+        s1.charset = "UTF-8";
+        s1.setAttribute("crossorigin", "*");
+        s0.parentNode.insertBefore(s1, s0);
+      })();
+    }
+  }, [isChatOpen]);
+
   return (
     <div>
       <Topbanner />
@@ -54,6 +72,23 @@ export default function Home() {
       <Bannerten/>
       <Testimonial/>
       <Bannereleven/>
+     
+      {/* Chat Window */}
+      {isChatOpen && (
+        <div className="fixed bottom-16 right-5 w-80 h-96 bg-white rounded-lg shadow-lg flex flex-col overflow-hidden border border-gray-300">
+          <div className="bg-blue-500 text-white p-3 flex justify-between items-center">
+            <span>Chatbot</span>
+            <button
+              onClick={() => setIsChatOpen(false)}
+              className="text-white text-lg hover:text-gray-200"
+            >
+              ✖
+            </button>
+          </div>
+          <div id="tawk-chat-container" className="flex-grow"></div>
+        </div>
+      )}
     </div>
   );
 }
+ 

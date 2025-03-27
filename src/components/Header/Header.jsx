@@ -11,58 +11,20 @@ import { useSelector } from 'react-redux';
 import Topbar from '../Header/Topbar';
 import Navbar from '../Header/Navbar';
 import logo from '../../../public/assets/images/img/logo.webp';
-import Seed from '../../../public/assets/images/hometopcategoryicon/seeds.svg';
-import Pesticides from '../../../public/assets/images/hometopcategoryicon/fertilizer.svg';
-import Fertilizers from '../../../public/assets/images/hometopcategoryicon/agriculture.svg';
-import Agricultural from '../../../public/assets/images/hometopcategoryicon/agriculture.svg';
-import Drone from '../../../public/assets/images/hometopcategoryicon/drone.svg';
-import Animal from '../../../public/assets/images/hometopcategoryicon/animalf.svg';
-import Food from '../../../public/assets/images/hometopcategoryicon/foodproduct.svg';
-import Garden from '../../../public/assets/images/hometopcategoryicon/garden.svg';
-import Noga from '../../../public/assets/images/hometopcategoryicon/noga.svg';
-import Combo from '../../../public/assets/images/hometopcategoryicon/combo.svg';
-import Millets from '../../../public/assets/images/hometopcategoryicon/millets.svg';
-import Services from '../../../public/assets/images/hometopcategoryicon/services.svg';
-import Herb from '../../../public/assets/images/hometopcategoryicon/herbs.svg';
-import Art from '../../../public/assets/images/hometopcategoryicon/arts.svg';
-import Packing from '../../../public/assets/images/hometopcategoryicon/packing.svg';
-import Plasticulture from '../../../public/assets/images/hometopcategoryicon/plasticulture.svg';
-import Fruits from '../../../public/assets/images/hometopcategoryicon/fruits.svg';
 import { makeRequest } from "@/api";
 
 
 
 // Categories array with image paths fixed
-const categories = [
-    { name: "Seed", image: Seed, link: "/Category" },
-    { name: "Pesticides", image: Pesticides, link: "" },
-    { name: "Fertilizers", image: Fertilizers, link: "" },
-    { name: "Agricultural Machineries", image: Agricultural, link: "" },
-    { name: "Drone Services", image: Drone, link: "/Categoryfour" },
-    { name: "Animal Feed", image: Animal, link: "" },
-    { name: "Food Products", image: Food, link: "" },
-    { name: "Garden", image: Garden, link: "" },
-    { name: "Noga", image: Noga, link: "" },
-    { name: "Combo packs", image: Combo, link: "" },
-    { name: "Millets", image: Millets, link: "" },
-    { name: "Services", image: Services, link: "" },
-    { name: "Herb product", image: Herb, link: "" },
-    { name: "Art and craft", image: Art, link: "" },
-    { name: "Packing Materials", image: Packing, link: "" },
-    { name: "Plasticulture", image: Plasticulture, link: "" },
-    { name: "Fruits", image: Fruits, link: "" },
-];
+
 
 
 
 const Header = () => {
     const [Categorydata,setCategoryData]=useState([]) //To store Catgegory List
-  
-    
     const [searchQuery, setSearchQuery] = useState(""); // State for search query
     const [isCategoryOpen, setIsCategoryOpen] = useState(false); // State for category dropdown visibility
     const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
-
     const { cartItems, totalQuantity, totalPrice } = useSelector((state) => state.cart);
     const totalItems = cartItems.length;
     const wishlistCount = useSelector((state) => state.wishlist.wishlistItems.length);

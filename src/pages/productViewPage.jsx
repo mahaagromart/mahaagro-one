@@ -229,7 +229,7 @@
 //             </div>
 
 //             {/* Reviews Section */}
-            
+
 //             <Reviews />
 //             {/* Related Products Section */}
 //             <div className="mt-12">
@@ -511,9 +511,9 @@
 //                 const rawProduct = response.dataset.$values[0];
 
 //                    const weights = rawProduct.variants.$values.map((variant) => {
-                   
+
 //                     return{
-               
+
 //                     label: variant.varient_Name,
 //                     originalPrice: Number(variant.pricing.maximuM_RETAIL_PRICE),
 //                     discountedPrice: Number(variant.pricing.sellinG_PRICE),
@@ -618,10 +618,10 @@
 //                         <span className="text-gray-600">{product.rating}</span>
 //                     </div>
 //                     {/* <p className="text-base text-gray-800 mt-4" dangerouslySetInnerHTML={{ __html: product.description }} /> */}
-                    
+
 //                     {/* Updated Pricing Section */}
 //                     <div className="mt-4">
-                      
+
 //                         <p className="text-xl font-bold text-green-600">₹{selectedWeight?.previousPrice ?? 'N/A'}</p>
 //                         {/* <p className="text-sm text-gray-500 line-through">₹{selectedWeight?.Pricing}</p> Strikethrough Previous Price */}
 //                         <p className="text-sm text-gray-500 line-through">₹{selectedWeight?.calculatedPrice}</p> {/* Fixed to previousPrice */}
@@ -970,7 +970,7 @@
 
 //             <div className="mt-8">
 //                 <h3 className="text-2xl font-semibold text-black">Product Description</h3>
-                
+
 //             </div>
 
 //             <Reviews />
@@ -1008,21 +1008,24 @@ export default function ProductViewPage() {
     const [selectedWeight, setSelectedWeight] = useState(null);
     const [newReview, setNewReview] = useState({ name: '', description: '' });
     const imageBaseUrl = process.env.NEXT_PUBLIC_IMAGE_API_URL || "http://localhost:5136";
+    const [productId,setProductId]=useState()
 
     const getProductDetails = async (productId) => {
         try {
             setLoading(true);
             setError(null);
-            console.log('Fetching product with ID:', productId);
+
 
             const response = await makeRequest('post', '/Product/GetCompletProductDescription', { ProductId: productId });
-            console.log('API Response:', response);
 
             if (response?.status === 0 && response?.message === 'Product details fetched successfully') {
                 const rawProduct = response.dataset.$values[0];
-
+                setProductId(rawProduct.proD_ID);
                 const weights = rawProduct.variants.$values.map((variant) => ({
+         
+                    
                     label: variant.varient_Name,
+                    varient_id:variant.varientS_ID,
                     originalPrice: Number(variant.pricing.maximuM_RETAIL_PRICE),
                     discountedPrice: Number(variant.pricing.sellinG_PRICE),
                     calculatedPrice: Number(variant.pricing.calculateD_PRICE),
@@ -1034,6 +1037,7 @@ export default function ProductViewPage() {
                     previousPrice: Number(variant.pricing.pricing),
                     DiscountAmount: Number(variant.pricing.discounT_AMOUNT),
                 }));
+               
 
                 const formattedProduct = {
                     id: rawProduct.proD_ID,
@@ -1045,10 +1049,10 @@ export default function ProductViewPage() {
                     discount: weights[0]?.discount || 0,
                 };
 
-                console.log('Formatted Product:', formattedProduct);
+
                 setProduct(formattedProduct);
-                setSelectedWeight(weights[0]); // Set default weight
-                setQuantity(weights[0]?.minOrderQuantity || 1); // Initialize quantity to minOrderQuantity
+                setSelectedWeight(weights[0]); 
+                setQuantity(weights[0]?.minOrderQuantity || 1);
             } else {
                 setError('Product details not found');
                 console.error('Unexpected response:', response);
@@ -1061,9 +1065,22 @@ export default function ProductViewPage() {
         }
     };
 
+    const InsertInCart=async(e)=>{
+        console.log(e.varient_id ,productId);
+        const response = await makeRequest('post', 'Cart/InsertCartData',
+             { VARIENTS_ID : e.varient_id,
+                PROD_ID : productId
+              });
+        console.log(response)
+
+
+
+    }
+
+
     useEffect(() => {
         if (proD_ID) {
-            console.log('proD_ID from URL:', proD_ID);
+
             getProductDetails(proD_ID);
         }
     }, [proD_ID]);
@@ -1072,18 +1089,7 @@ export default function ProductViewPage() {
     if (error) return <div>{error}</div>;
     if (!product) return <div>Product not found</div>;
 
-    const handleAddToCart = () => {
-        const productToAdd = {
-            ...product,
-            selectedWeight: selectedWeight.label,
-            selectedPrice: selectedWeight.discountedPrice,
-            selectedOriginalPrice: selectedWeight.originalPrice,
-            selectedDiscountedPrice: selectedWeight.discountedPrice,
-            quantity,
-        };
-        dispatch(addToCart(productToAdd));
-        console.log('Added to Cart:', productToAdd);
-    };
+
 
     const handleSubmitReview = (e) => {
         e.preventDefault();
@@ -1091,7 +1097,7 @@ export default function ProductViewPage() {
             alert('Please provide both your name and a description for the review.');
             return;
         }
-        console.log('New Review:', newReview);
+       
         setNewReview({ name: '', description: '' });
     };
 
@@ -1147,11 +1153,10 @@ export default function ProductViewPage() {
                                     <button
                                         key={index}
                                         onClick={() => handleWeightChange(weight)}
-                                        className={`px-4 py-2 border rounded-md ${
-                                            selectedWeight?.label === weight.label
+                                        className={`px-4 py-2 border rounded-md ${selectedWeight?.label === weight.label
                                                 ? 'bg-green-500 text-white border-green-500'
                                                 : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100'
-                                        }`}
+                                            }`}
                                     >
                                         {weight.label}
                                     </button>
@@ -1162,36 +1167,21 @@ export default function ProductViewPage() {
 
                     <div className="flex items-center space-x-4 mt-4">
                         <button
-                            onClick={() =>
-                                setQuantity(
-                                    quantity > selectedWeight?.minOrderQuantity ? quantity - 1 : selectedWeight?.minOrderQuantity
-                                )
-                            }
+                            onClick={() =>setQuantity(quantity > selectedWeight?.minOrderQuantity ? quantity - 1 : selectedWeight?.minOrderQuantity)}
                             className="w-8 h-8 text-xl border border-gray-400 rounded-full hover:bg-gray-100"
                         >
                             -
                         </button>
                         <span className="text-lg">{quantity}</span>
-                        <button
-                            onClick={() => setQuantity(quantity + 1)}
-                            className="w-8 h-8 text-xl border border-gray-400 rounded-full hover:bg-gray-100"
-                        >
-                            +
-                        </button>
+                        <button onClick={() => setQuantity(quantity + 1)}className="w-8 h-8 text-xl border border-gray-400 rounded-full hover:bg-gray-100">+</button>
+                        <span class="text-2xl font-semibold text-green-500 bg-green-100 px-4 py-2 rounded-2xl shadow-md"> ₹{selectedWeight?.discountedPrice * selectedWeight?.minOrderQuantity}</span>
+
                     </div>
 
-                    <div className="flex space-x-4 mt-6">
-                        <button
-                            onClick={handleAddToCart}
-                            className="flex items-center px-6 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
-                        >
-                            <AiOutlineShoppingCart className="mr-2" />
-                            <span>Add to Cart</span>
+                    <div className="flex space-x-4 mt-6 gap-4">
+                        <button onClick={() => InsertInCart(selectedWeight)} className="flex items-center px-6 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"><AiOutlineShoppingCart className="mr-2" /><span>Add to Cart</span>
                         </button>
-                        <button className="flex items-center px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">
-                            <AiOutlineShoppingCart className="mr-2" />
-                            <span>Buy Now</span>
-                        </button>
+                        <button className="flex items-center px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"><AiOutlineShoppingCart className="mr-2" /><span>Buy Now</span></button>
                     </div>
 
                     <div className="mt-6 border-t border-gray-300 pt-4">
@@ -1225,7 +1215,7 @@ export default function ProductViewPage() {
 
             <div className="mt-8">
                 <h3 className="text-2xl font-semibold text-black">Product Description</h3>
-      
+
             </div>
 
             <Reviews />
