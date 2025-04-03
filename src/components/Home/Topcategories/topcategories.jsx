@@ -7,7 +7,7 @@ import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
 // Import static images (optional fallback if API image fails)
-import Noga from "../../../../public/assets/images/hometopcategoryicon/homecategorytwo/noga.svg";
+// import Noga from "../../../../public/assets/images/hometopcategoryicon/homecategorytwo/noga.svg";
 import Fertilizer from "../../../../public/assets/images/hometopcategoryicon/homecategorytwo/fertilizer.svg";
 import Agriculture from "../../../../public/assets/images/hometopcategoryicon/homecategorytwo/agriculturemachines.svg";
 import Drone from "../../../../public/assets/images/hometopcategoryicon/homecategorytwo/droneservice.svg";
@@ -80,7 +80,7 @@ const CategorySection = () => {
                                             alt={category.category_Name}
                                             width="80"
                                             height="80"
-                                            className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-full border-2 border-green-500 object-cover"
+                                            className="w-16 h-16 p-2 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-full border-2 border-green-500 object-cover"
                                             onError={(e) => {
                                                 e.target.src = Noga.src; // Fallback image if API image fails
                                             }}

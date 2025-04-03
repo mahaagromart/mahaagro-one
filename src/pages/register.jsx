@@ -1,248 +1,4 @@
-// import { useState } from "react";
-// import Link from "next/link";
-// import { useRouter } from "next/router";
-// import { makeRequest } from "@/api";
-// import swal from "sweetalert";
-// import { useDispatch } from "react-redux";
-// import { login } from "../store/authSlice"; // Ensure correct import path
 
-// export default function Signup() {
-//   const [formData, setFormData] = useState({
-//     firstName: "",
-//     lastName: "",
-//     email: "",
-//     password: "",
-//     confirmPassword: "",
-//   });
-
-//   const [errors, setErrors] = useState({
-//     firstName: "",
-//     lastName: "",
-//     email: "",
-//     password: "",
-//     confirmPassword: "",
-//   });
-
-//   const [isLoading, setIsLoading] = useState(false);
-//   const router = useRouter();
-//   const dispatch = useDispatch();
-
-//   // Handle input changes
-//   const handleChange = (e) => {
-//     const { name, value } = e.target;
-//     setFormData((prev) => ({ ...prev, [name]: value }));
-//     setErrors((prev) => ({ ...prev, [name]: "" }));
-//   };
-
-//   // Form validation
-//   const validateForm = () => {
-//     let formErrors = {};
-//     const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-//     const nameRegex = /^[a-zA-Z\s]+$/;
-
-//     if (!formData.firstName.trim()) {
-//       formErrors.Firstname = "First name is required";
-//     } else if (!nameRegex.test(formData.firstName)) {
-//       formErrors.Firstname = "First name should contain only letters";
-//     }
-
-//     if (!formData.lastName.trim()) {
-//       formErrors.lastName = "Last name is required";
-//     } else if (!nameRegex.test(formData.lastName)) {
-//       formErrors.lastName = "Last name should contain only letters";
-//     }
-
-//     if (!formData.email.trim()) {
-//       formErrors.email = "Email is required";
-//     } else if (!emailRegex.test(formData.email)) {
-//       formErrors.email = "Please enter a valid email address";
-//     }
-
-//     if (!formData.password) {
-//       formErrors.password = "Password is required";
-//     } else if (formData.password.length < 6) {
-//       formErrors.password = "Password must be at least 6 characters long";
-//     }
-
-//     if (!formData.confirmPassword) {
-//       formErrors.confirmPassword = "Please confirm your password";
-//     } else if (formData.password !== formData.confirmPassword) {
-//       formErrors.confirmPassword = "Passwords do not match";
-//     }
-
-//     return formErrors;
-//   };
-
-//   // Handle form submission
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-//     const formErrors = validateForm();
-//     setErrors(formErrors);
-
-//     if (Object.keys(formErrors).length === 0) {
-//       setIsLoading(true);
-//       try {
-//         const response = await makeRequest("POST", "/Authentication/Register", {
-//           FirstName: formData.firstName,
-//           LastName: formData.lastName,
-//           EmailId: formData.email,
-//           Password: formData.password,
-//         });
-
-//         // Check the response from the API
-//         if (response.code === 200 || response.code === 201) {
-//           await swal("Success", "Registered Successfully! Please log in.", "success");
-
-//           // Dispatch login action after registration
-//           const userData = {
-//             userId: response.userId || "",
-//             firstName: formData.firstName,
-//             lastName: formData.lastName,
-//             designationId: response.designationId || null,
-//             designationName: response.designationName || null,
-//             accessToken: response.token || "",
-//           };
-
-//           dispatch(login(userData));
-//           router.push("/"); // Redirect to homepage
-//         } else if (response.code === 409) {
-//           swal("Error", "Email already registered", "error");
-//         } else {
-//           swal("Error", "Registration failed. Please try again.", "error");
-//         }
-//       } catch (error) {
-//         console.error("Registration error:", error);
-//         swal("Error", "Network error occurred. Please try again.", "error");
-//       } finally {
-//         setIsLoading(false); // Ensure that loading state is reset after the API call
-//       }
-//     }
-//   };
-
-//   return (
-//     <div className="min-h-screen bg-gray-50 flex items-center justify-center py-10">
-//       <div className="bg-white p-8 rounded-lg shadow-xl max-w-md w-full">
-//         <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">Register</h2>
-//         <form onSubmit={handleSubmit}>
-//           {/* First Name */}
-//           <div className="mb-6">
-//             <label htmlFor="firstName" className="block text-lg font-medium text-gray-700 mb-2">
-//               First Name
-//             </label>
-//             <input
-//               type="text"
-//               id="firstName"
-//               name="firstName"
-//               className="w-full p-4 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-//               placeholder="Enter your first name"
-//               value={formData.firstName}
-//               onChange={handleChange}
-//               disabled={isLoading}
-//               required
-//             />
-//             {errors.Firstname && <p className="text-red-500 text-sm mt-1">{errors.firstName}</p>}
-//           </div>
-
-//           {/* Last Name */}
-//           <div className="mb-6">
-//             <label htmlFor="lastName" className="block text-lg font-medium text-gray-700 mb-2">
-//               Last Name
-//             </label>
-//             <input
-//               type="text"
-//               id="lastName"
-//               name="lastName"
-//               className="w-full p-4 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-//               placeholder="Enter your last name"
-//               value={formData.lastName}
-//               onChange={handleChange}
-//               disabled={isLoading}
-//               required
-//             />
-//             {errors.lastName && <p className="text-red-500 text-sm mt-1">{errors.lastName}</p>}
-//           </div>
-
-//           {/* Email */}
-//           <div className="mb-6">
-//             <label htmlFor="email" className="block text-lg font-medium text-gray-700 mb-2">
-//               Email
-//             </label>
-//             <input
-//               type="email"
-//               id="email"
-//               name="email"
-//               className="w-full p-4 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-//               placeholder="Enter your email"
-//               value={formData.email}
-//               onChange={handleChange}
-//               disabled={isLoading}
-//               required
-//             />
-//             {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
-//           </div>
-
-//           {/* Password */}
-//           <div className="mb-6">
-//             <label htmlFor="password" className="block text-lg font-medium text-gray-700 mb-2">
-//               Password
-//             </label>
-//             <input
-//               type="password"
-//               id="password"
-//               name="password"
-//               className="w-full p-4 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-//               placeholder="Enter your password"
-//               value={formData.password}
-//               onChange={handleChange}
-//               disabled={isLoading}
-//               required
-//             />
-//             {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
-//           </div>
-
-//           {/* Confirm Password */}
-//           <div className="mb-6">
-//             <label htmlFor="confirmPassword" className="block text-lg font-medium text-gray-700 mb-2">
-//               Confirm Password
-//             </label>
-//             <input
-//               type="password"
-//               id="confirmPassword"
-//               name="confirmPassword"
-//               className="w-full p-4 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-//               placeholder="Confirm your password"
-//               value={formData.confirmPassword}
-//               onChange={handleChange}
-//               disabled={isLoading}
-//               required
-//             />
-//             {errors.confirmPassword && (
-//               <p className="text-red-500 text-sm mt-1">{errors.confirmPassword}</p>
-//             )}
-//           </div>
-
-//           {/* Submit Button */}
-//           <button
-//             type="submit"
-//             className={`w-full py-4 bg-green-500 text-white font-semibold rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 mb-6 ${
-//               isLoading ? "opacity-50 cursor-not-allowed" : "hover:bg-green-600"
-//             }`}
-//             disabled={isLoading}
-//           >
-//             {isLoading ? "Registering..." : "Register"}
-//           </button>
-
-//           {/* Link to Signin */}
-//           <div className="text-center mb-6">
-//             <Link href="/login">
-//               <span className="text-lg text-green-500 hover:underline">Already have an account? Log In</span>
-//             </Link>
-//           </div>
-//         </form>
-//       </div>
-//     </div>
-//   );
-// }
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -250,6 +6,7 @@ import { makeRequest } from "@/api";
 import swal from "sweetalert";
 import { useDispatch } from "react-redux";
 import { login } from "../store/authSlice";
+
 
 export default function Signup() {
   const [formData, setFormData] = useState({
@@ -273,7 +30,8 @@ export default function Signup() {
 
   const fetchCountries = async () => {
     try {
-      const data = await makeRequest("POST", "/FormHelper/GetAllCountry");
+      const data = await makeRequest("GET", "/FormHelper/GetAllCountry");
+
       if (data.code === 200) {
         setCountries(data.countryEntities?.$values || []);
       } else {
@@ -360,7 +118,7 @@ export default function Signup() {
     setIsLoading(true);
     try {
       const response = await makeRequest("POST", "/Authentication/Register", formData);
-      console.log(formData);
+
       console.log("Response:", response);
 
       if (response.code === 200 || response.code === 201) {
