@@ -121,7 +121,8 @@ export default function Home() {
                   <Image
                     src={product.image}
                     alt={product.name}
-            
+                    width={200}
+                    height={150}
                     className="w-full h-56 p-4 object-cover transition-transform duration-500 transform group-hover:scale-105"
                   />
                 </Link>

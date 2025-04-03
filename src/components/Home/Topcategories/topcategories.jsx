@@ -75,16 +75,17 @@ const CategorySection = () => {
                                 <div className="relative text-center group cursor-pointer">
                                     {/* Circular Image */}
                                     <div className="flex justify-center">
-                                        <img
-                                            src={`${process.env.NEXT_PUBLIC_IMAGE_API_URL}${category.image}`}
-                                            alt={category.category_Name}
-                                            width="80"
-                                            height="80"
-                                            className="w-16 h-16 p-2 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-full border-2 border-green-500 object-cover"
-                                            onError={(e) => {
-                                                e.target.src = Noga.src; // Fallback image if API image fails
-                                            }}
-                                        />
+                                    <Image
+  src={`${process.env.NEXT_PUBLIC_IMAGE_API_URL}${category.image}`}  // Ensure you are using category.image.src
+  alt={category.category_Name}
+  width="80"
+  height="80"
+  className="w-16 h-16 p-2 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-full border-2 border-green-500 object-cover"
+  onError={(e) => {
+    e.target.src = Noga.src; // Fallback image if API image fails
+  }}
+/>
+
                                     </div>
                                     {/* Centered Category Name */}
                                     <h4 className="mt-2 text-xs sm:text-sm text-center">
