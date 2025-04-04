@@ -14,6 +14,7 @@ const Home = () => {
     const [BannerDataTwo, setBannerDataTwo] = useState([]);
     const [BannerDataThree, setBannerDataThree] = useState([]);
     const [BannerDataFour, setBannerDataFour] = useState([]);
+    const imageBaseUrl = process.env.NEXT_PUBLIC_IMAGE_API_URL ;
 
     const GetAllBanner = async () => {
         try {
@@ -75,7 +76,7 @@ const Home = () => {
                             <SwiperSlide key={index}>
                                 <div className="bg-[#9ecf3f] rounded-2xl shadow-lg p-6 flex flex-col items-center text-center">
                                     <Image
-                                        src={`${process.env.NEXT_PUBLIC_IMAGE_API_URL}${img.url}`}
+                                        src={`${imageBaseUrl}${img.url}`}
                                         alt="Grocery Items"
                                         className="rounded-md"
                                         width={400}
@@ -105,7 +106,7 @@ const Home = () => {
                         {BannerDataFour.map((img, index) => (
                             <SwiperSlide key={index}>
                                 <Image
-                                    src={`${process.env.NEXT_PUBLIC_IMAGE_API_URL}${img.url}`}
+                                    src={`${imageBaseUrl}${img.url}`}
                                     alt="Service Image"
                                     className="rounded-2xl"
                                     width={500}
@@ -129,7 +130,7 @@ const Home = () => {
                         {BannerDataTwo.map((img, index) => (
                             <SwiperSlide key={index}>
                                 <Image
-                                    src={`${process.env.NEXT_PUBLIC_IMAGE_API_URL}${img.url}`}
+                                    src={`${imageBaseUrl}${img.url}`}
                                     alt="Service Image"
                                     className="rounded-2xl"
                                     width={500}
@@ -155,7 +156,7 @@ const Home = () => {
                             <SwiperSlide key={index}>
                                 <div className="bg-[#e78f54] rounded-2xl shadow-lg p-6 flex flex-col items-center text-center">
                                     <Image
-                                        src={`${process.env.NEXT_PUBLIC_IMAGE_API_URL}${img.url}`}
+                                        src={`${imageBaseUrl}${img.url}`}
                                         alt="Grocery Items"
                                         className="rounded-md"
                                         width={400}
