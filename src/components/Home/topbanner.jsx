@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Image from 'next/image';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
@@ -7,54 +7,38 @@ import 'swiper/css/pagination';
 import 'swiper/css/autoplay';
 import { Pagination, Autoplay } from 'swiper/modules';
 import Bannerresponsive from '../Home/Topmobilebanner';
-import { makeRequest } from "@/api";
+
+// Static banner images - replace these with your actual images
+import Banner1Img1 from '../../../public/assets/images/homebanner/img..png';
+import Banner1Img2 from '../../../public/assets/images/homebanner/img..png';
+import Banner2Img1 from '../../../public/assets/images/homebanner/dronee (1).png';
+import Banner2Img2 from '../../../public/assets/images/homebanner/dronee (2).png';
+import Banner3Img1 from '../../../public/assets/images/homebanner/img..png';
+import Banner3Img2 from '../../../public/assets/images/homebanner/img..png';
+import Banner4Img1 from '../../../public/assets/images/homebanner/dronee (1).png';
+import Banner4Img2 from '../../../public/assets/images/homebanner/dronee (1).png';
 
 const Home = () => {
-    const [BannerDataOne, setBannerOneData] = useState([]);
-    const [BannerDataTwo, setBannerDataTwo] = useState([]);
-    const [BannerDataThree, setBannerDataThree] = useState([]);
-    const [BannerDataFour, setBannerDataFour] = useState([]);
-    const imageBaseUrl = process.env.NEXT_PUBLIC_IMAGE_API_URL ;
-
-    const GetAllBanner = async () => {
-        try {
-            const storedToken = localStorage.getItem("authToken");
-            if (!storedToken) {
-                console.warn("No auth token found in localStorage.");
-                return;
-            }
-
-            const response = await makeRequest("POST", "/Banner/GetAllBanner", {
-                headers: { Authorization: `Bearer ${storedToken}` },
-            });
-
-            if (Array.isArray(response) && response.length > 0) {
-                const firstResponse = response[0];
-
-                if (firstResponse.message === "SUCCESS" && firstResponse.retval === "SUCCESS") {
-                 
-                    const BannerType = firstResponse.dataset?.$values || [];
-
-                    setBannerOneData(BannerType.filter(el => el.bannerType === "Banner 1"));
-                    setBannerDataTwo(BannerType.filter(el => el.bannerType === "Banner 2"));
-                    setBannerDataThree(BannerType.filter(el => el.bannerType === "Banner 3"));
-                    setBannerDataFour(BannerType.filter(el => el.bannerType === "Banner 4"));
-                } else {
-                    console.warn("Response did not return SUCCESS:", firstResponse);
-                }
-            } else {
-                console.warn("Invalid response format:", response);
-            }
-        } catch (error) {
-            console.error("Error fetching banners:", error.response?.data || error.message || error);
-        }
-    };
-
-    useEffect(() => {
-        GetAllBanner();
-
-
-    }, []);
+    // Static banner data
+    const BannerDataOne = [
+        { url: Banner1Img1, bannerType: "Banner 1" },
+        { url: Banner1Img2, bannerType: "Banner 1" }
+    ];
+    
+    const BannerDataTwo = [
+        { url: Banner2Img1, bannerType: "Banner 2" },
+        { url: Banner2Img2, bannerType: "Banner 2" }
+    ];
+    
+    const BannerDataThree = [
+        { url: Banner3Img1, bannerType: "Banner 3" },
+        { url: Banner3Img2, bannerType: "Banner 3" }
+    ];
+    
+    const BannerDataFour = [
+        { url: Banner4Img1, bannerType: "Banner 4" },
+        { url: Banner4Img2, bannerType: "Banner 4" }
+    ];
 
     return (
         <>
@@ -76,12 +60,12 @@ const Home = () => {
                             <SwiperSlide key={index}>
                                 <div className="bg-[#9ecf3f] rounded-2xl shadow-lg p-6 flex flex-col items-center text-center">
                                     <Image
-                                        src={`${imageBaseUrl}${img.url}`}
+                                        src={img.url}
                                         alt="Grocery Items"
                                         className="rounded-md"
                                         width={400}
                                         height={350}
-                                        unoptimized
+                                        priority
                                     />
                                     <h2 className="text-lg md:text-xl font-bold mt-4 mb-3 text-white">Get Up to 30%* OFF</h2>
                                     <button className="bg-black hover:bg-gray-800 text-white font-bold py-1 px-4 rounded-md w-full sm:w-auto">
@@ -106,12 +90,12 @@ const Home = () => {
                         {BannerDataFour.map((img, index) => (
                             <SwiperSlide key={index}>
                                 <Image
-                                    src={`${imageBaseUrl}${img.url}`}
+                                    src={img.url}
                                     alt="Service Image"
                                     className="rounded-2xl"
                                     width={500}
                                     height={290}
-                                    unoptimized
+                                    priority
                                 />
                             </SwiperSlide>
                         ))}
@@ -130,7 +114,7 @@ const Home = () => {
                         {BannerDataTwo.map((img, index) => (
                             <SwiperSlide key={index}>
                                 <Image
-                                    src={`${imageBaseUrl}${img.url}`}
+                                    src={img.url}
                                     alt="Service Image"
                                     className="rounded-2xl"
                                     width={500}
@@ -156,12 +140,12 @@ const Home = () => {
                             <SwiperSlide key={index}>
                                 <div className="bg-[#e78f54] rounded-2xl shadow-lg p-6 flex flex-col items-center text-center">
                                     <Image
-                                        src={`${imageBaseUrl}${img.url}`}
+                                        src={img.url}
                                         alt="Grocery Items"
                                         className="rounded-md"
                                         width={400}
                                         height={350}
-                                        unoptimized
+                                        priority
                                     />
                                     <h2 className="text-lg md:text-xl font-bold mt-4 mb-3 text-white">Get Up to 30%* OFF</h2>
                                     <button className="bg-black hover:bg-gray-800 text-white font-bold py-1 px-4 rounded-md w-full sm:w-auto">

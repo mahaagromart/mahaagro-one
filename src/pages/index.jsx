@@ -46,7 +46,7 @@ export default function Home() {
 
   return (
     <div>
-      <Topbanner />
+       <Topbanner />
       <Topcategories />
       <Fruitcategory />
       <Banner />
