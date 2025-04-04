@@ -31,7 +31,7 @@ const Home = () => {
                 const firstResponse = response[0];
 
                 if (firstResponse.message === "SUCCESS" && firstResponse.retval === "SUCCESS") {
-                    console.log(firstResponse)
+                 
                     const BannerType = firstResponse.dataset?.$values || [];
 
                     setBannerOneData(BannerType.filter(el => el.bannerType === "Banner 1"));

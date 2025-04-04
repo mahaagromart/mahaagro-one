@@ -17,7 +17,7 @@ const Footer = () => {
             <div className="space-y-4">
               <p className="text-sm text-gray-600 flex items-center">
                 <FaPhoneAlt className="text-green-600 mr-2 text-xl" />
-                <span>Call us: Monday - Friday, 9:30 AM - 5:50 PM</span>
+                <span>Call us: +918888842300</span>
               </p>
               <p className="text-sm text-gray-600 flex items-center">
                 <FaMapMarkerAlt className="text-green-600 mr-2 text-6xl" /> {/* Increased icon size */}

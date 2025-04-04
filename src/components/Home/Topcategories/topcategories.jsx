@@ -4,22 +4,7 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { makeRequest } from "@/api";
 import Image from "next/image";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
-// Import static images (optional fallback if API image fails)
-// import Noga from "../../../../public/assets/images/hometopcategoryicon/homecategorytwo/noga.svg";
-import Fertilizer from "../../../../public/assets/images/hometopcategoryicon/homecategorytwo/fertilizer.svg";
-import Agriculture from "../../../../public/assets/images/hometopcategoryicon/homecategorytwo/agriculturemachines.svg";
-import Drone from "../../../../public/assets/images/hometopcategoryicon/homecategorytwo/droneservice.svg";
-import Animalfeed from "../../../../public/assets/images/hometopcategoryicon/homecategorytwo/animalfeed.svg";
-import Food from "../../../../public/assets/images/hometopcategoryicon/homecategorytwo/foodproduct.svg";
-import Gardening from "../../../../public/assets/images/hometopcategoryicon/homecategorytwo/gardening.svg";
-import Millets from "../../../../public/assets/images/hometopcategoryicon/homecategorytwo/millets.svg";
-import Service from "../../../../public/assets/images/hometopcategoryicon/homecategorytwo/service.svg";
-import Herbal from "../../../../public/assets/images/hometopcategoryicon/homecategorytwo/herbal.svg";
-import Art from "../../../../public/assets/images/hometopcategoryicon/homecategorytwo/artandcraft.svg";
-import Fruits from "../../../../public/assets/images/hometopcategoryicon/homecategorytwo/fruits.svg";
-import { CloudCog } from "lucide-react";
+const imageBaseUrl = process.env.NEXT_PUBLIC_IMAGE_API_URL;
 
 
 
@@ -50,7 +35,7 @@ const CategorySection = () => {
 
     useEffect(() => {
         GetAllCategory();
-        console.log(categoryData)
+
     }, []);
 
     return (
@@ -76,15 +61,14 @@ const CategorySection = () => {
                                     {/* Circular Image */}
                                     <div className="flex justify-center">
                                     <Image
-  src={`${process.env.NEXT_PUBLIC_IMAGE_API_URL}${category.image}`}  // Ensure you are using category.image.src
-  alt={category.category_Name}
-  width="80"
-  height="80"
-  className="w-16 h-16 p-2 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-full border-2 border-green-500 object-cover"
-  onError={(e) => {
-    e.target.src = Noga.src; // Fallback image if API image fails
-  }}
-/>
+                                    src={`${imageBaseUrl}${category.image}`}  // Ensure you are using category.image.src
+                                    alt={category.category_Name}
+                                    width="80"
+                                    height="80"
+                                    style={{objectFit:'cover'}}
+                                    className="w-16 h-16 p-2 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-full border-2 border-green-500 object-cover"
+                                    // onError={(e) => {e.target.src = Noga.src; }}
+                                    />
 
                                     </div>
                                     {/* Centered Category Name */}

@@ -16,6 +16,7 @@ export default function EcommerceProfilePage() {
     // { id: 2, name: 'mango', price: '₹249.99', image: '/smartwatch.jpg' },
     // { id: 3, name: 'kiwi', price: '₹59.99', image: '/wallet.jpg' },
   ]);
+  const imageBaseUrl = process.env.NEXT_PUBLIC_IMAGE_API_URL;
   const [userProfile, setUserProfile] = useState({
     profileImage: '',
     firstName: 'User',
@@ -229,7 +230,7 @@ export default function EcommerceProfilePage() {
                   <div className="h-16 w-16 rounded-full bg-gray-200 overflow-hidden">
                     {userProfile.profileImage ? (
                       <img 
-                        src={`${process.env.NEXT_PUBLIC_IMAGE_API_URL}${userProfile.profileImage}`}
+                        src={`${imageBaseUrl}${userProfile.profileImage}`}
                         alt="Profile" 
                         className="h-full w-full object-cover"
                       />

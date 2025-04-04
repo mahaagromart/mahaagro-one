@@ -225,7 +225,8 @@ const Cart = () => {
                     alt={item.productName || 'Product'}
                     width={100}
                     height={100}
-                    className="rounded-md object-cover mr-4 border border-gray-200"
+                    style={{objectFit:'cover'}}
+                    // className="rounded-md object-cover mr-4 border border-gray-200"
                   />
                   <div className="space-y-1">
                     <span className="font-semibold text-lg text-gray-800 hover:text-green-600 transition-colors duration-200">

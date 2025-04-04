@@ -5,7 +5,7 @@ import { setupInterceptors } from './interceptors.js';
 // API instance
 const api = axios.create({
     //  baseURL: "http://localhost:5136/",
-    baseURL: "https://api.mahaagro.org/",
+        baseURL: "https://api.mahaagro.org",
 });
 
 setupInterceptors(api);
@@ -15,7 +15,7 @@ export const makeRequest = async (method, url, data = null, headers = {}) => {
     const finalHeaders = {
         Authorization: authToken ? `Bearer ${authToken}` : '',
         'Content-Type': 'application/json',
-        ...headers, // Merge additional headers if provided
+        ...headers,
     };
 
     try {
@@ -28,6 +28,6 @@ export const makeRequest = async (method, url, data = null, headers = {}) => {
         return response.data;
     } catch (error) {
         console.log(error);
-        throw error; // Re-throw the error to handle it in the calling function
+        throw error;
     }
 };

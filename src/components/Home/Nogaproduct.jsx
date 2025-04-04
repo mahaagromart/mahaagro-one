@@ -21,7 +21,7 @@ export default function Home() {
         { Id: 1 },
         { headers: { Authorization: `Bearer ${storedToken}` } }
       );
-      console.log(response);
+
 
       // Map API data to the component's product structure
       const mappedProducts = response.dataset.$values.map((item) => {
