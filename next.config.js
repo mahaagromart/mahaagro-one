@@ -1,8 +1,14 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ['api.mahaagro.org'],  // Add the domain here
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "api.mahaagro.org", // ✅ no slash
+        pathname: "/Content/**",     // ✅ matches your image path
+      },
+    ],
   },
 };
 
-module.exports = nextConfig;
+export default nextConfig; // ✅ Use `module.exports` if not using `"type": "module"`

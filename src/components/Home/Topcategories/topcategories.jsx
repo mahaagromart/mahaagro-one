@@ -4,11 +4,13 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { makeRequest } from "@/api";
 import Image from "next/image";
-const imageBaseUrl = process.env.NEXT_PUBLIC_IMAGE_API_URL;
 
 
 
 const CategorySection = () => {
+    const imageBaseUrl = process.env.NEXT_PUBLIC_IMAGE_API_URL;
+
+    console.log(imageBaseUrl)
     const [categoryData, setCategoryData] = useState([]);
 
     // Fetch categories from API
