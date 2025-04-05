@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import Link from "next/link"; // Import the Next.js Link
 
 
-const CartPage = () => {
+const wishlistCart = () => {
   var user = useSelector((state) => state.auth.isAuthenicated);
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col items-center py-10">
@@ -38,4 +38,4 @@ const CartPage = () => {
   );
 };
 
-export default CartPage;
+export default wishlistCart;

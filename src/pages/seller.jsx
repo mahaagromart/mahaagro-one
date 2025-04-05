@@ -2,7 +2,7 @@ import { useState } from 'react';
 import Head from 'next/head';
 import { FaUser, FaMoneyCheckAlt, FaStore } from 'react-icons/fa';
 
-const BecomeSeller = () => {
+const Seller = () => {
     const [formData, setFormData] = useState({
         f_name: '',
         l_name: '',
@@ -410,4 +410,4 @@ const BecomeSeller = () => {
     );
 };
 
-export default BecomeSeller;
+export default Seller;

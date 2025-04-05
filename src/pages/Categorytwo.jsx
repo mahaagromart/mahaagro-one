@@ -9,7 +9,7 @@ import ProductList from '../components/Home/fertilizer';
 import productsData from '../data/product';
 import { useRouter } from 'next/router';
 
-const CategoryPage = () => {
+const Categorytwo = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [cartItems, setCartItems] = useState([]);
     const [wishlist, setWishlist] = useState([]);
@@ -862,7 +862,7 @@ const CategoryPage = () => {
     );
 }
 
-export default CategoryPage;    
+export default Categorytwo;    
 
 
 

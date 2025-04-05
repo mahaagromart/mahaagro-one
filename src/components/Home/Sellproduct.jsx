@@ -10,7 +10,7 @@ import selld from "../../../public/assets/images/onthesell/sell (4).svg";
 import selle from "../../../public/assets/images/onthesell/sell (5).svg";
 import sellf from "../../../public/assets/images/onthesell/selltwo.webp";
 
-const Sell = () => {
+const Sellproduct = () => {
     return (
         <div className="container mx-auto px-4">
             {/* Header Section */}
@@ -96,4 +96,4 @@ const Sell = () => {
     );
 };
 
-export default Sell;
+export default Sellproduct;

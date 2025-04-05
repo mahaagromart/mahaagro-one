@@ -9,7 +9,7 @@ import Reviews from "../components/Home/Review";
 import { AiOutlineShoppingCart, AiOutlineCheckCircle, AiFillHeart, AiOutlineShareAlt } from 'react-icons/ai';
 import { FiDollarSign } from 'react-icons/fi';
 
-export default function ProductViewPage() {
+export default function Agricultureview() {
     const router = useRouter();
     const { productId } = router.query; // Get the product ID from the URL
     const dispatch = useDispatch();

@@ -18,7 +18,7 @@ import Banner3Img2 from '../../../public/assets/images/homebanner/img..png';
 import Banner4Img1 from '../../../public/assets/images/homebanner/dronee (1).png';
 import Banner4Img2 from '../../../public/assets/images/homebanner/dronee (1).png';
 
-const Home = () => {
+const topbanner = () => {
     // Static banner data
     const BannerDataOne = [
         { url: Banner1Img1, bannerType: "Banner 1" },
@@ -161,4 +161,4 @@ const Home = () => {
     );
 };
 
-export default Home;
+export default topbanner;

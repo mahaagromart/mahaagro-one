@@ -5,7 +5,7 @@ import Link from 'next/link';
 import React from 'react';
 import { FaUsers, FaGlobe, FaShippingFast, FaWallet, FaLock, FaCheck } from 'react-icons/fa';
 
-function SmartSection() {
+function Seller() {
     return (
         <>
             <section className="flex bg-white container mx-auto p-2 justify-center items-center">
@@ -171,4 +171,4 @@ function SmartSection() {
     );
 }
 
-export default SmartSection;
+export default Seller;

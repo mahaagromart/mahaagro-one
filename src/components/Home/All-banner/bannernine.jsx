@@ -6,7 +6,7 @@ import Bannerm from "../../../../public/assets/images/homebanner/garden (2).png"
 import Bannerf from "../../../../public/assets/images/homebanner/garden (3).png"; 
 // import "../All-banner/banner.css";
 
-const Banner = () => {
+const Bannernine = () => {
     const [currentSlide, setCurrentSlide] = useState(0);
     const [isPaused, setIsPaused] = useState(false);
 
@@ -195,4 +195,4 @@ const Banner = () => {
     );
 };
 
-export default Banner;
+export default Bannernine;

@@ -9,11 +9,11 @@ import Foodc from "../../../public/assets/images/foodproduct/food-1 (3).webp";
 import Foodd from "../../../public/assets/images/foodproduct/food-1 (4).webp";
 import Foode from "../../../public/assets/images/foodproduct/food-1 (5).webp";
 import Foodf from "../../../public/assets/images/foodproduct/food-1 (6).webp";
-import { FaHeart, FaArrowRight, FaArrowLeft } from 'react-icons/fa'; // Import heart and arrow icons
+import { FaHeart, FaArrowRight, FaArrowLeft } from 'react-icons/fa';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
-export default function Home() {
+export default function Foodproduct() {
     const [cart, setCart] = useState([]);
     const dispatch = useDispatch();
 
@@ -132,7 +132,6 @@ export default function Home() {
             ],
             selectedWeight: { label: '350g', originalPrice: 8, discountedPrice: 3 }
         },
-        // Add more products if necessary...
     ]);
 
     const handleWeightChange = (weight, productId) => {
@@ -157,13 +156,18 @@ export default function Home() {
         };
         setCart([...cart, productToAdd]);
         dispatch(addToCart(productToAdd));
-        console.log("Added to Cart:", productToAdd); // Optional: for debugging
+        console.log("Added to Cart:", productToAdd);
+    };
+
+    const handleAddToWishList = (product) => {
+        console.log("Added to Wishlist:", product);
+        // Add your wishlist logic here
     };
 
     const renderStars = (rating) => {
         let stars = '';
         for (let i = 0; i < 5; i++) {
-            stars += i < rating ? '★' : '☆'; // Full stars for rating, empty stars for the rest
+            stars += i < rating ? '★' : '☆';
         }
         return stars;
     };
@@ -187,7 +191,7 @@ export default function Home() {
         if (!isDragging.current) return;
         e.preventDefault();
         const x = e.pageX - productContainerRef.current.offsetLeft;
-        const walk = (x - startX.current) * 2; // Adjust the scroll speed
+        const walk = (x - startX.current) * 2;
         productContainerRef.current.scrollLeft = scrollLeft.current - walk;
     };
 
@@ -201,13 +205,13 @@ export default function Home() {
             </div>
             <div className="relative">
                 <button
-                    className="absolute top-1/2 left-0 transform -translate-y-1/2 bg-white border border-gray-300 rounded-full p-2 shadow-lg z-10 opacity-60"
+                    className="absolute top-1/2 left-0 transform -translate-y-1/2 bg-white border border-gray-300 rounded-full p-2 shadow-lg z-10 opacity-60 hover:opacity-100 transition-opacity"
                     onClick={() => productContainerRef.current.scrollBy({ left: -300, behavior: 'smooth' })}
                 >
                     <FaArrowLeft />
                 </button>
                 <div
-                    className="flex overflow-x-auto scrollbar-hide"
+                    className="flex overflow-x-auto scrollbar-hide space-x-4"
                     ref={productContainerRef}
                     onMouseDown={startDragging}
                     onMouseUp={stopDragging}
@@ -217,15 +221,14 @@ export default function Home() {
                     {products.map((product) => (
                         <div
                             key={product.id}
-                            className="flex-none w-40 sm:w-50 md:w-64 transition-all duration-300 transform hover:scale-105 hover:shadow-lg border border-gray-200 rounded-lg overflow-hidden relative mr-4"
-
+                            className="flex-none w-40 sm:w-50 md:w-64 transition-all duration-300 transform hover:scale-105 hover:shadow-lg border border-gray-200 rounded-lg overflow-hidden relative"
                         >
                             <div className="absolute top-0 left-0 bg-gray-200 text-xs font-semibold text-gray-700 p-2 md:p-4">
                                 {product.category}
                             </div>
                             <div className="flex items-center justify-between p-2 md:p-4">
                                 <FaHeart
-                                    className="text-red-400 ml-auto text-xl cursor-pointer hover:text-red-600 transition-all duration-300 ease-in-out"
+                                    className="text-red-400 ml-auto text-xl cursor-pointer hover:text-red-600 transition-all duration-300"
                                     onClick={() => handleAddToWishList(product)}
                                 />
                             </div>
@@ -234,21 +237,26 @@ export default function Home() {
                                     pathname: '/productViewPage',
                                     query: { productId: product.id }
                                 }} className="group">
-                                      <Image
-                                    src={product.image}
-                                    alt={product.name}
-                                    className="w-[200px] h-[200px] p-4  transition-transform duration-500 transform group-hover:scale-105"
-                                />
+                                    <div className="relative w-full h-48">
+                                        <Image
+                                            src={product.image}
+                                            alt={product.name}
+                                            fill
+                                            sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 200px"
+                                            className="p-4 object-contain transition-transform duration-500 group-hover:scale-105"
+                                            priority={product.id <= 3} // Only prioritize first few images
+                                        />
+                                    </div>
                                 </Link>
                                 <div className="mt-3">
-                                    <div className="flex gap-1 md:gap-2 mt-2">
+                                    <div className="flex gap-1 md:gap-2 mt-2 flex-wrap">
                                         {product.weights.map((weight) => (
                                             <button
                                                 key={weight.label}
                                                 onClick={() => handleWeightChange(weight, product.id)}
                                                 className={`px-2 py-1 text-xs md:px-3 md:py-1 rounded-full border ${product.selectedWeight.label === weight.label
                                                     ? 'bg-green-700 text-white'
-                                                    : 'bg-green-200'
+                                                    : 'bg-green-200 text-gray-800'
                                                     }`}
                                             >
                                                 {weight.label}
@@ -261,7 +269,7 @@ export default function Home() {
                                         <span className="text-xs md:text-sm font-bold text-green-700">₹{product.selectedWeight.discountedPrice}</span>
                                         <span className="text-xs text-gray-500 line-through">₹{product.selectedWeight.originalPrice}</span>
                                     </div>
-                                    <h2 className="text-xs md:text-sm font-semibold text-gray-800">
+                                    <h2 className="text-xs md:text-sm font-semibold text-gray-800 mt-1">
                                         <Link href={`/product/${product.id}`}>
                                             {product.name}
                                         </Link>
@@ -279,7 +287,7 @@ export default function Home() {
                                 <div className="mt-3">
                                     <button
                                         onClick={() => handleAddToCart(product)}
-                                        className="w-full bg-green-500 text-white py-1 md:py-2 rounded-md hover:bg-green-600 transition duration-300"
+                                        className="w-full bg-green-500 text-white py-1 md:py-2 rounded-md hover:bg-green-600 transition duration-300 text-sm"
                                     >
                                         Add to Cart
                                     </button>
@@ -289,7 +297,7 @@ export default function Home() {
                     ))}
                 </div>
                 <button
-                    className="absolute top-1/2 right-0 transform -translate-y-1/2 bg-white border border-gray-300 rounded-full p-2 shadow-lg z-10 opacity-60"
+                    className="absolute top-1/2 right-0 transform -translate-y-1/2 bg-white border border-gray-300 rounded-full p-2 shadow-lg z-10 opacity-60 hover:opacity-100 transition-opacity"
                     onClick={() => productContainerRef.current.scrollBy({ left: 300, behavior: 'smooth' })}
                 >
                     <FaArrowRight />
@@ -300,8 +308,8 @@ export default function Home() {
                     display: none;
                 }
                 .scrollbar-hide {
-                    -ms-overflow-style: none;  /* IE and Edge */
-                    scrollbar-width: none;  /* Firefox */
+                    -ms-overflow-style: none;
+                    scrollbar-width: none;
                 }
             `}</style>
         </div>

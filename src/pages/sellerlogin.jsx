@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import logo from '../../public/assets/images/img/logo.webp';
-const SignIn = () => {
+const SellerLogIn = () => {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -106,4 +106,4 @@ const SignIn = () => {
   );
 };
 
-export default SignIn;
+export default SellerLogIn;

@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Sellers = () => {
+const Sellerlist = () => {
   const sellers = [
     { id: 33, name: 'Dhage Foods Pr...' },
     { id: 34, name: 'VT enterprises' },
@@ -79,4 +79,4 @@ const Sellers = () => {
   );
 };
 
-export default Sellers;
+export default Sellerlist;

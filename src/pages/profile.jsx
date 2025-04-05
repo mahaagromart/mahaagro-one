@@ -7,7 +7,7 @@ import { useRouter } from 'next/router';
 import { makeRequest } from "@/api";
 import Swal from 'sweetalert2';
 
-export default function EcommerceProfilePage() {
+export default function Profile() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState('orders');
   const [cartData, setCartData] = useState([]);

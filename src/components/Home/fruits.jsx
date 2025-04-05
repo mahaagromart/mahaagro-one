@@ -9,7 +9,7 @@ import productsData from '../../data/product';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
-export default function Home() {
+export default function fruits() {
     const dispatch = useDispatch();
     const [cart, setCart] = useState([]);
     const [wishlist, setWishlist] = useState([]);

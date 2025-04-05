@@ -3,7 +3,7 @@ import { FaGift } from 'react-icons/fa';
 import { useRouter } from 'next/router'; // Import useRouter hook
 import { useSelector } from 'react-redux'; // Import useSelector to get cart items
 
-export default function Checkout() {
+export default function Billform() {
     const router = useRouter();
     const { totalPrice, totalQuantity } = router.query; // Retrieve query parameters
     const { cartItems } = useSelector((state) => state.cart); // Get cart items from the state

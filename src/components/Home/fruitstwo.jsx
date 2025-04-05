@@ -10,7 +10,7 @@ import { FaHeart } from "react-icons/fa";
 import productsData from "../../data/product"; // Adjust path as per your project structure
 import { useRouter } from "next/router"; // For Next.js 12/13 Pages Router
 
-export default function Home() {
+export default function Fruittwo() {
   const dispatch = useDispatch();
   const router = useRouter();
   const { category_id } = router.query; 

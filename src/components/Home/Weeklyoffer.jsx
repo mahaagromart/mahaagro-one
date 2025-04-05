@@ -13,7 +13,7 @@ import Foodd from "../../../public/assets/images/foodproduct/food-1 (4).webp";
 import Foode from "../../../public/assets/images/foodproduct/food-1 (5).webp";
 import Foodf from "../../../public/assets/images/foodproduct/food-1 (6).webp";
 
-const Banner = () => {
+const Weeklyoffer = () => {
     const dispatch = useDispatch();
     const [cart, setCart] = useState([]);
     const [currentTime, setCurrentTime] = useState(new Date());
@@ -284,4 +284,4 @@ const Banner = () => {
     );
 };
 
-export default Banner;
+export default Weeklyoffer;

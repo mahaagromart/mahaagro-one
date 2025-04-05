@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { Search } from 'lucide-react';
 
-export default function SearchPage() {
+export default function MobileSearchPage() {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
 

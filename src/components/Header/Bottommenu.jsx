@@ -2,7 +2,7 @@ import { useState } from "react";
 import { FaHome, FaSearch, FaThList, FaLifeRing, FaBars } from "react-icons/fa";
 import Link from "next/link"; // Import Next.js Link
 
-const BottomNavBar = () => {
+const Bottommenu = () => {
   const [activeTab, setActiveTab] = useState(0);
 
   return (
@@ -30,7 +30,7 @@ const BottomNavBar = () => {
           isActive={activeTab === 2}
           onClick={() => setActiveTab(2)}
           ariaLabel="Category"
-          linkTo="/topcategories"
+          linkTo="/mobilecategory"
         />
         <NavItem
           icon={<FaLifeRing size={24} />}
@@ -79,4 +79,4 @@ const NavItem = ({ icon, label, isActive, onClick, ariaLabel, linkTo }) => {
   );
 };
 
-export default BottomNavBar;
+export default Bottommenu;

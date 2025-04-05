@@ -7,7 +7,7 @@ import swal from 'sweetalert';
 import { useDispatch } from "react-redux";
 import { login } from '../store/authSlice.js';
 
-export default function Signin() {
+export default function Login() {
   const [formData, setFormData] = useState({
     email: '',
     password: '',

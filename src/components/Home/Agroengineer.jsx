@@ -12,7 +12,7 @@ import { FaHeart, FaArrowRight, FaArrowLeft } from 'react-icons/fa'; // Import h
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
-export default function Home() {
+export default function Agroengineer() {
     const [cart, setCart] = useState([]);
 
     const [products, setProducts] = useState([

@@ -8,7 +8,7 @@ import { useDispatch } from "react-redux";
 import { login } from "../store/authSlice";
 
 
-export default function Signup() {
+export default function Register() {
   const [formData, setFormData] = useState({
     FirstName: "",
     LastName: "",

@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Img from '../../../../public/assets/images/homebanner/bannerthree.jpg';
 
-const Bannerthree = () => {
+const Bannertwo = () => {
   return (
     <div className="flex justify-center">
       <div className="container max-w-screen-2xl px-4 py-8">
@@ -29,4 +29,4 @@ const Bannerthree = () => {
   );
 };
 
-export default Bannerthree;
+export default Bannertwo;

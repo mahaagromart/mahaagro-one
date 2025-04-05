@@ -6,9 +6,9 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { makeRequest } from "@/api";
 
-const imageBaseUrl = process.env.NEXT_PUBLIC_IMAGE_API_URL ;
+const imageBaseUrl = process.env.NEXT_PUBLIC_IMAGE_API_URL;
 
-export default function Home() {
+export default function Nogaproduct() {
   const [cart, setCart] = useState([]);
   const [products, setProducts] = useState([]);
 
@@ -160,7 +160,7 @@ export default function Home() {
               <div className="flex items-center justify-between p-2 md:p-4">
                 <FaHeart
                   className="text-red-400 ml-auto text-xl cursor-pointer hover:text-red-600 transition-all duration-300 ease-in-out"
-                  // onClick={() => handleAddToWishList(product)}
+                // onClick={() => handleAddToWishList(product)}
                 />
               </div>
               <div className="p-2 md:p-4">
@@ -174,10 +174,12 @@ export default function Home() {
                   <Image
                     src={product.image} // Use the full URL directly
                     alt={product.name}
-                    width={200}
-                    height={200}
-                    className="p-4 transition-transform duration-500 transform group-hover:scale-105 object-cover w-[200px] h-[200px]"
+                    width={0}
+                    height={0}
+                    sizes="(max-width: 640px) 100vw, 200px"
+                    className="w-full max-w-[200px] aspect-square p-4 transition-transform duration-500 transform group-hover:scale-105 object-cover"
                   />
+
                 </Link>
                 <div className="mt-3">
                   <div className="flex gap-1 md:gap-2 mt-2">
@@ -185,11 +187,10 @@ export default function Home() {
                       <button
                         key={weight.label}
                         onClick={() => handleWeightChange(weight, product.id)}
-                        className={`px-2 py-1 text-xs md:px-3 md:py-1 rounded-full border ${
-                          product.selectedWeight.label === weight.label
+                        className={`px-2 py-1 text-xs md:px-3 md:py-1 rounded-full border ${product.selectedWeight.label === weight.label
                             ? "bg-green-700 text-white"
                             : "bg-green-200"
-                        }`}
+                          }`}
                       >
                         {weight.label}
                       </button>
@@ -220,7 +221,7 @@ export default function Home() {
                 <div className="flex items-center mt-2">
                   <span className="text-yellow-500 text-xs">{renderStars(product.rating)}</span>
                 </div>
-              
+
               </div>
             </div>
           ))}
