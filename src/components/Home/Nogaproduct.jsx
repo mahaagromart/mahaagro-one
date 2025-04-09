@@ -5,22 +5,20 @@ import { FaHeart, FaArrowRight, FaArrowLeft } from "react-icons/fa";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { makeRequest } from "@/api";
+import { useRouter } from "next/router";
 
 const imageBaseUrl = process.env.NEXT_PUBLIC_IMAGE_API_URL;
 
 export default function Nogaproduct() {
   const [cart, setCart] = useState([]);
   const [products, setProducts] = useState([]);
-
+  const router = useRouter();
   const GetNogaProduct = async () => {
     try {
       const storedToken = localStorage.getItem("authToken");
-      const response = await makeRequest(
-        "POST",
-        "/Product/GetProductBycategory",
-        { Id: 1 },
-        { headers: { Authorization: `Bearer ${storedToken}` } }
-      );
+      const response = await makeRequest("POST","/Product/GetProductBycategory",{ Id: 1 },{ headers: { Authorization: `Bearer ${storedToken}` } });
+      console.log(response)
+      
 
 
       // Map API data to the component's product structure
