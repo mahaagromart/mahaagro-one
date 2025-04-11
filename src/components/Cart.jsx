@@ -46,6 +46,7 @@ const Cart = () => {
           const response = await makeRequest("POST", "/Authentication/GetUserProfile", {UserId:userId}, { 
             headers: { Authorization: `Bearer ${storedToken}` } 
           });
+          console.log(response)
       // Extract the addresses and pincodes
       const addressData = response?.userProfilesEntity?.$values || [];
       const formattedAddresses = addressData.flatMap(addr => [

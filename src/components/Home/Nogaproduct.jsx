@@ -17,7 +17,7 @@ export default function Nogaproduct() {
     try {
       const storedToken = localStorage.getItem("authToken");
       const response = await makeRequest("POST","/Product/GetProductBycategory",{ Id: 1 },{ headers: { Authorization: `Bearer ${storedToken}` } });
-      console.log(response)
+    
       
 
 
@@ -25,16 +25,14 @@ export default function Nogaproduct() {
       const mappedProducts = response.dataset.$values.map((item) => {
         const variant = item.variants.$values[0];
         const originalPrice = parseFloat(variant.pricing.maximuM_RETAIL_PRICE);
-        const discountAmount = parseFloat(variant.pricing.discounT_AMOUNT || "0"); // Default to 0 if undefined
+        const discountAmount = parseFloat(variant.pricing.discounT_AMOUNT || "0"); 
         const discountedPrice = parseFloat(variant.pricing.calculateD_PRICE);
 
         // Calculate discount percentage
-        const discountPercentage = discountAmount
-          ? Math.round((discountAmount / originalPrice) * 100)
-          : 0;
+        const discountPercentage = discountAmount ? Math.round((discountAmount / originalPrice) * 100) : 0;
 
         return {
-          id: item.proD_ID, // Use proD_ID as a unique identifier
+          id: item.proD_ID, 
           category: item.categorY_ID === "1" ? "NOGA" : "Unknown",
           name: item.product_Name,
           image: `${imageBaseUrl}${item.thumbnailImage}`, // Store full URL here
@@ -90,7 +88,7 @@ export default function Nogaproduct() {
       selectedDiscountedPrice: product.selectedWeight.discountedPrice,
     };
     setCart([...cart, productToAdd]);
-    console.log("Added to Cart:", productToAdd);
+
   };
 
   const renderStars = (rating) => {
@@ -165,7 +163,8 @@ export default function Nogaproduct() {
                 <Link
                   href={{
                     pathname: "/productViewPage",
-                    query: { productId: product.id },
+                    // query: { productId: product.id },
+                    query: { proD_ID: product.id },
                   }}
                   className="group"
                 >

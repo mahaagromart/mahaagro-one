@@ -1,9 +1,10 @@
+'use client';
 import React from 'react';
 
 
 const MarqueeSlider = () => {
   return (
-    <div className="container mx-auto  h-[2cm] overflow-hidden">
+    <div className="container mx-auto max-w-[1450px] h-[2cm] overflow-hidden px-4 sm:px-6 lg:px-8">
       <div className="e-con-full e-flex e-con e-parent">
         <div className="elementor-widget-container">
           <div className="rt-marquee-slider">

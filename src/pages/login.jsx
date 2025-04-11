@@ -6,6 +6,7 @@ import { makeRequest } from '@/api';
 import swal from 'sweetalert';
 import { useDispatch } from "react-redux";
 import { login } from '../store/authSlice.js';
+import { Eye, EyeOff } from 'lucide-react';
 
 export default function Login() {
   const [formData, setFormData] = useState({
@@ -16,6 +17,7 @@ export default function Login() {
     email: '',
     password: '',
   });
+  const [showPassword, setShowPassword] = useState(false);
    
   const router = useRouter();
   const { totalPrice, totalQuantity } = router.query;
@@ -58,13 +60,14 @@ export default function Login() {
           EmailId: formData.email,
           Password: formData.password
         })
-        console.log(data)
+
       }catch (error) {
         swal('Error', 'Network Error', 'error');
       } 
 
       data.then((response) => {
         if(response.code === 200) {
+     
           swal('Success', 'Logged In Successfully', 'success').then(() => {
             const userData = {
               userId: response.authenticationsList.$values[0].userId,
@@ -92,7 +95,7 @@ export default function Login() {
 
   return (
     <>
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center py-10">
+      <div className="  flex items-center justify-center py-10">
         <div className="bg-white p-8 rounded-lg shadow-xl max-w-md w-full">
           <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">Log In</h2>
           <form onSubmit={handleSubmit}>
@@ -112,20 +115,33 @@ export default function Login() {
               />
               {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
             </div>
-            <div className="mb-6">
+            <div className="mb-6 relative">
               <label htmlFor="password" className="block text-lg font-medium text-gray-700 mb-2">
                 Password
               </label>
-              <input
-                type="password"
-                id="password"
-                name="password"
-                className="w-full p-4 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-                placeholder="Enter your password"
-                value={formData.password}
-                onChange={handleChange}
-                required
-              />
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  id="password"
+                  name="password"
+                  className="w-full p-4 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 pr-12"
+                  placeholder="Enter your password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  required
+                />
+                <button
+                  type="button"
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 hover:text-gray-700"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? (
+                    <EyeOff className="h-6 w-6" />
+                  ) : (
+                    <Eye className="h-6 w-6" />
+                  )}
+                </button>
+              </div>
               {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
             </div>
             <button

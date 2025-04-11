@@ -90,8 +90,7 @@ const CategoryPage = () => {
 
     const handleVariantClick = (productId, variant, e) => {
         e.stopPropagation();
-        setProducts(products.map((product) =>
-            product.proD_ID === productId ? { ...product, selectedVariant: variant } : product
+        setProducts(products.map((product) =>product.proD_ID === productId ? { ...product, selectedVariant: variant } : product
         ));
     };
 
