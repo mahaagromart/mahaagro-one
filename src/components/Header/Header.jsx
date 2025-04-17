@@ -11,6 +11,10 @@ import Topbar from '../Header/Topbar';
 import Navbar from '../Header/Navbar';
 import logo from '../../../public/assets/images/img/logo.webp';
 import { makeRequest } from "@/api";
+import { Button } from 'antd';
+import { logout,login } from '@/store/authSlice';
+import { useDispatch } from "react-redux";
+
 
 const Header = () => {
     const [Categorydata, setCategoryData] = useState([]);
@@ -21,6 +25,7 @@ const Header = () => {
     const wishlistCount = useSelector((state) => state.wishlist.wishlistItems.length);
     var user = useSelector((state) => state.auth.isAuthenicated);
 
+    const dispatch = useDispatch();
     // Fetch cart data
     const fetchCartData = async () => {
         const storedToken = localStorage.getItem("authToken");
@@ -166,9 +171,23 @@ const Header = () => {
                                         Login
                                     </Link>
                                 )}
-                                <Link href="/register" className="block px-4 py-2 text-gray-700 font-bold rounded-lg hover:bg-gray-100">
-                                    Register
-                                </Link>
+                                {user ?
+                                    (<Link href="/" className="block px-4 py-2 text-gray-700 font-bold rounded-lg hover:bg-gray-100"
+
+                                        onClick={() => {
+
+                                            dispatch(logout());
+                                            //window.location.reload();
+                                        }}
+
+                                    >
+                                        Logout
+                                    </Link> 
+                                    ) : (<Link href="/register" className="block px-4 py-2 text-gray-700 font-bold rounded-lg hover:bg-gray-100">
+                                        Register
+                                    </Link>)
+
+                                }
                             </div>
                         )}
                     </div>

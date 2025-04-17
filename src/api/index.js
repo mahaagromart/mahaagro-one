@@ -5,8 +5,8 @@ import { setupInterceptors } from './interceptors.js';
 // API instance
 const api = axios.create({
 
-        //baseURL: "https://api.mahaagro.org",
-         baseURL: "http://localhost:5136",
+        baseURL: "https://api.mahaagro.org",
+        //  baseURL: "http://localhost:5136",
 });
 
 setupInterceptors(api);

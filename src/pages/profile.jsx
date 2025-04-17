@@ -2,13 +2,20 @@ import Head from 'next/head';
 import { useEffect, useState } from 'react';
 import { FiShoppingBag, FiHeart, FiSettings, FiCreditCard, FiMapPin, FiLogOut } from 'react-icons/fi';
 import Image from "next/image";
+import { useSelector } from "react-redux";
 import Link from "next/link";
 import { useRouter } from 'next/router';
 import { makeRequest } from "@/api";
 import Swal from 'sweetalert2';
+import { useDispatch } from "react-redux";
+
+// import { clearAuthToken } from  '../auth.js';  
+import { clearAuthToken } from '@/api/auth.js';
+import { logout,login } from '@/store/authSlice';
 
 export default function Profile() {
   const router = useRouter();
+  const dispatch = useDispatch();
   const [activeTab, setActiveTab] = useState('orders');
   const [cartData, setCartData] = useState([]);
   const [wishlistItems, setWishlistItems] = useState([
@@ -16,6 +23,7 @@ export default function Profile() {
     // { id: 2, name: 'mango', price: '₹249.99', image: '/smartwatch.jpg' },
     // { id: 3, name: 'kiwi', price: '₹59.99', image: '/wallet.jpg' },
   ]);
+  var user = useSelector((state) => state.auth.isAuthenicated);
   const imageBaseUrl = process.env.NEXT_PUBLIC_IMAGE_API_URL;
   const [userProfile, setUserProfile] = useState({
     profileImage: '',
@@ -74,8 +82,14 @@ export default function Profile() {
   };
 
   useEffect(() => {
-    GetCartData();
-    GetUserProfile();
+    // debugger
+    if (!user) {
+      router.push("/login");
+    }else{
+      GetCartData();
+      GetUserProfile();
+
+    }
   }, []);
 
   // Format joining date
@@ -221,7 +235,7 @@ export default function Profile() {
       <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <h1 className="text-3xl font-bold text-gray-900 mb-8">My Account</h1>
-          
+         
           <div className="flex flex-col lg:flex-row gap-8">
             {/* Sidebar Navigation */}
             <div className="w-full lg:w-64 flex-shrink-0">
@@ -229,9 +243,9 @@ export default function Profile() {
                 <div className="flex items-center space-x-4 mb-8">
                   <div className="h-16 w-16 rounded-full bg-gray-200 overflow-hidden">
                     {userProfile.profileImage ? (
-                      <img 
+                      <img
                         src={`${imageBaseUrl}${userProfile.profileImage}`}
-                        alt="Profile" 
+                        alt="Profile"
                         className="h-full w-full object-cover"
                       />
                     ) : (
@@ -254,14 +268,14 @@ export default function Profile() {
                 </div>
 
                 <nav className="space-y-2">
-                  <button 
+                  <button
                     onClick={() => setActiveTab('orders')}
                     className={`flex items-center space-x-3 px-3 py-2 w-full text-left rounded-lg font-medium ${activeTab === 'orders' ? 'bg-purple-50 text-purple-700' : 'text-gray-700 hover:bg-gray-100'}`}
                   >
                     <FiShoppingBag className="text-lg" />
                     <span>My Orders</span>
                   </button>
-                  <button 
+                  <button
                     onClick={() => setActiveTab('wishlist')}
                     className={`flex items-center space-x-3 px-3 py-2 w-full text-left rounded-lg font-medium ${activeTab === 'wishlist' ? 'bg-purple-50 text-purple-700' : 'text-gray-700 hover:bg-gray-100'}`}
                   >
@@ -269,7 +283,7 @@ export default function Profile() {
                     <span>Wishlist</span>
                     <span className="ml-auto bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded-full">{wishlistItems.length}</span>
                   </button>
-                  <button 
+                  <button
                     onClick={() => setActiveTab('cart')}
                     className={`flex items-center space-x-3 px-3 py-2 w-full text-left rounded-lg font-medium ${activeTab === 'cart' ? 'bg-purple-50 text-purple-700' : 'text-gray-700 hover:bg-gray-100'}`}
                   >
@@ -279,28 +293,34 @@ export default function Profile() {
                       <span className="ml-auto bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded-full">{cartData.length}</span>
                     )}
                   </button>
-                  <button 
+                  <button
                     onClick={() => setActiveTab('payments')}
                     className={`flex items-center space-x-3 px-3 py-2 w-full text-left rounded-lg font-medium ${activeTab === 'payments' ? 'bg-purple-50 text-purple-700' : 'text-gray-700 hover:bg-gray-100'}`}
                   >
                     <FiCreditCard className="text-lg" />
                     <span>Payment Methods</span>
                   </button>
-                  <button 
+                  <button
                     onClick={() => setActiveTab('address')}
                     className={`flex items-center space-x-3 px-3 py-2 w-full text-left rounded-lg font-medium ${activeTab === 'address' ? 'bg-purple-50 text-purple-700' : 'text-gray-700 hover:bg-gray-100'}`}
                   >
                     <FiMapPin className="text-lg" />
                     <span>Address Book</span>
                   </button>
-                  <button 
+                  <button
                     onClick={() => setActiveTab('settings')}
                     className={`flex items-center space-x-3 px-3 py-2 w-full text-left rounded-lg font-medium ${activeTab === 'settings' ? 'bg-purple-50 text-purple-700' : 'text-gray-700 hover:bg-gray-100'}`}
                   >
                     <FiSettings className="text-lg" />
                     <span>Account Settings</span>
                   </button>
-                  <button className="flex items-center space-x-3 px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-lg font-medium w-full text-left">
+                  <button className="flex items-center space-x-3 px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-lg font-medium w-full text-left"
+                    onClick={()=>{
+
+                      dispatch(logout()); 
+                      window.location.reload();
+                    }}
+                  >
                     <FiLogOut className="text-lg" />
                     <span>Logout</span>
                   </button>
@@ -389,7 +409,7 @@ export default function Profile() {
               {activeTab === 'cart' && (
                 <div className="bg-white rounded-xl shadow-sm p-6">
                   <h2 className="text-xl font-semibold text-gray-900 mb-6">Shopping Cart</h2>
-                  
+                 
                   {cartData?.length > 0 ? (
                     <>
                       <ul className="space-y-6 mb-8">

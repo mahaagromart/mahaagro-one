@@ -1,6 +1,7 @@
 const { setAuthToken } = require("@/api/auth");
 import { createSlice } from "@reduxjs/toolkit";
-
+import { clearAuthToken } from "@/api/auth";
+ 
 const intiState = () => {
     if(typeof window !== "undefined"){
         return {
@@ -42,9 +43,13 @@ const authSlice = createSlice({
             localStorage.setItem("lastName", lastName);
             localStorage.setItem("designationId", designationId);
             localStorage.setItem("designationName", designationName);
+            localStorage.setItem("authToken",accessToken)
+
             setAuthToken(accessToken);
         },
         logout: (state) => {
+            
+            state.isAuthenicated = false;
             state.userId = "";
             state.firstName = "";
             state.lastName = "";
@@ -55,6 +60,7 @@ const authSlice = createSlice({
             localStorage.removeItem("lastName");
             localStorage.removeItem("designationId");
             localStorage.removeItem("designationName");
+            localStorage.removeItem("accessToken")
             clearAuthToken();
         },
     },

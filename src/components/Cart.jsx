@@ -19,8 +19,8 @@ const Cart = () => {
   const GetCartData = async () => {
     const storedToken = localStorage.getItem("authToken");
     try {
-      const response = await makeRequest("POST", "/Cart/GetCartData", {}, { 
-        headers: { Authorization: `Bearer ${storedToken}` } 
+      const response = await makeRequest("POST", "/Cart/GetCartData", {}, {
+        headers: { Authorization: `Bearer ${storedToken}` }
       });
       if (response && response[0] && response[0].dataset && response[0].dataset.$values) {
         const cartItems = response[0].dataset.$values;
@@ -41,12 +41,12 @@ const Cart = () => {
   // Fetch user addresses from API
   const fetchAddresses = async () => {
     const storedToken = localStorage.getItem("authToken");
-    const userId=localStorage.getItem("userId");
-        try {
-          const response = await makeRequest("POST", "/Authentication/GetUserProfile", {UserId:userId}, { 
-            headers: { Authorization: `Bearer ${storedToken}` } 
-          });
-          console.log(response)
+    const userId = localStorage.getItem("userId");
+    try {
+      const response = await makeRequest("POST", "/Authentication/GetUserProfile", { UserId: userId }, {
+        headers: { Authorization: `Bearer ${storedToken}` }
+      });
+
       // Extract the addresses and pincodes
       const addressData = response?.userProfilesEntity?.$values || [];
       const formattedAddresses = addressData.flatMap(addr => [
@@ -81,9 +81,12 @@ const Cart = () => {
     }
   };
 
+
+
   useEffect(() => {
     GetCartData();
     fetchAddresses();
+
   }, []);
 
   // Calculate total price and quantity
@@ -110,114 +113,202 @@ const Cart = () => {
     router.push(`/product/${id}`);
   };
 
-  const handlePlaceOrder = async (selectedAddressObj, cartItems) => {
-    if (!selectedAddressObj || cartItems.length === 0) {
-      console.warn("Missing address or cart items");
+//   const handlePlaceOrder = async (selectedAddressObj, cartItems) => {
+//     console.log("called")
+//     // if (!selectedAddressObj || cartItems.length === 0) {
+//     //   console.warn("Missing address or cart items");
+//     //   return;
+//     // }
+
+//     const storedToken = localStorage.getItem("authToken");
+// debugger
+//     console.log(cartItems);
+
+
+
+//     const variantIDs = cartItems.map(item => item.varientsId.toString());
+
+//     // Create request payload
+//     const payload = {
+//       varientID: variantIDs,
+//       DeliveryAddress: selectedAddressObj.fullAddress
+//     };
+
+
+
+//     try {
+//       const response = await makeRequest("POST","Order/CreateOrder",payload, {headers: {Authorization: `Bearer ${storedToken}`}});
+
+//       const dataset = response?.[0]?.dataset;
+//       if (dataset) {
+//         const { id: order_id, amount, currency } = dataset.orderDetails;
+
+//         const res = await loadRazorpayScript();
+//         if (!res) {
+//           alert("Failed to load Razorpay. Please check your connection.");
+//           return;
+//         }
+
+//         const options = {
+//           key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+//           amount: amount,
+//           currency: currency,
+//           name: "Mahaagromart",
+//           description: "Order Payment",
+//           order_id: order_id,
+//           handler: async (response) => {
+//             const paymentVerification = {
+//               razorpay_payment_id: response.razorpay_payment_id,
+//               razorpay_order_id: response.razorpay_order_id,
+//               razorpay_signature: response.razorpay_signature,
+//             };
+
+//             try {
+//               const verifyResponse = await makeRequest(
+//                 "POST",
+//                 "Order/VerifyPayment",
+//                 paymentVerification,
+//                 {
+//                   headers: {
+//                     Authorization: `Bearer ${storedToken}`
+//                   }
+//                 }
+//               );
+
+//               if (verifyResponse) {
+//                 Swal.fire("Payment Verified! ✅", "", "success").then(() =>
+//                   router.push("/order-success")
+//                 );
+//               } else {
+//                 Swal.fire("Payment Verification Failed! ❌", "", "error");
+//               }
+//             } catch (error) {
+//               console.error("Error Verifying Payment:", error);
+//               Swal.fire("Payment Verification Error", "", "error");
+//             }
+//           },
+//           prefill: {
+//             name: selectedAddressObj.name || "John Doe",
+//             email: "johndoe@example.com",
+//             contact: "9999999999",
+//           },
+//           theme: {
+//             color: "#3399cc",
+//           },
+//         };
+
+//         const razorpay = new window.Razorpay(options);
+//         razorpay.on("payment.failed", (response) => {
+//           console.error("Payment Failed:", response.error);
+//           Swal.fire("Payment Failed!", "Please try again.", "error");
+//         });
+
+//         razorpay.open();
+//       } else {
+//         Swal.fire("Failed to create order", "", "error");
+//       }
+//     } catch (error) {
+//       console.error("Error Creating Order:", error);
+//       Swal.fire("Something went wrong!", "Unable to place the order.", "error");
+//     }
+//   };
+
+const handlePlaceOrder = async (selectedAddressObj, cartItems) => {
+  if (!selectedAddressObj || cartItems.length === 0) {
+    Swal.fire("Missing address or cart items", "", "warning");
+    return;
+  }
+
+  const storedToken = localStorage.getItem("authToken");
+
+  const variantIDs = cartItems.map(item => `${item.varientsId},${item.quantity}`);
+
+  const payload = {
+    varientID: variantIDs,
+    DeliveryAddress: selectedAddressObj.id // or .fullAddress if required
+  };
+
+  try {
+    const response = await makeRequest("POST", "Order/CreateOrder", payload, {
+      headers: { Authorization: `Bearer ${storedToken}` }
+    });
+  
+    if (!response || !response.dataset || !response.dataset.orderDetails) {
+      Swal.fire("Order creation failed", "No order details returned", "error");
       return;
     }
   
-    const storedToken = localStorage.getItem("authToken");
-    const user_id = localStorage.getItem("userId");
+    const orderDetails = response.dataset.orderDetails;
+    const { id: order_id, amount, currency } = orderDetails;
+    const message = response.message || "Order created successfully";
   
-    // Extract varientIDs from cartItems
-    const variantIDs = cartItems.map(item => item.varientsId.toString());
+    const razorpayLoaded = await loadRazorpayScript();
+    if (!razorpayLoaded) {
+      Swal.fire("Failed to load Razorpay", "", "error");
+      return;
+    }
   
-    // Create request payload
-    const payload = {
-      varientID: variantIDs,
-      UserId: user_id,
-      DeliveryAddress: selectedAddressObj.fullAddress
-    };
-  
-  
-  
-    try {
-      const response = await makeRequest(
-        "POST",
-        "Order/CreateOrder",
-        payload,
-        {
-          headers: {
-            Authorization: `Bearer ${storedToken}`
-          }
-        }
-      );
-    
-      const dataset = response?.[0]?.dataset;
-      if (dataset) {
-        const { id: order_id, amount, currency } = dataset.orderDetails;
-  
-        const res = await loadRazorpayScript();
-        if (!res) {
-          alert("Failed to load Razorpay. Please check your connection.");
-          return;
-        }
-  
-        const options = {
-          key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
-          amount: amount,
-          currency: currency,
-          name: "Mahaagromart",
-          description: "Order Payment",
-          order_id: order_id,
-          handler: async (response) => {
-            const paymentVerification = {
-              razorpay_payment_id: response.razorpay_payment_id,
-              razorpay_order_id: response.razorpay_order_id,
-              razorpay_signature: response.razorpay_signature,
-            };
-  
-            try {
-              const verifyResponse = await makeRequest(
-                "POST",
-                "Order/VerifyPayment",
-                paymentVerification,
-                {
-                  headers: {
-                    Authorization: `Bearer ${storedToken}`
-                  }
-                }
-              );
-  
-              if (verifyResponse) {
-                Swal.fire("Payment Verified! ✅", "", "success").then(() =>
-                  router.push("/order-success")
-                );
-              } else {
-                Swal.fire("Payment Verification Failed! ❌", "", "error");
-              }
-            } catch (error) {
-              console.error("Error Verifying Payment:", error);
-              Swal.fire("Payment Verification Error", "", "error");
-            }
-          },
-          prefill: {
-            name: selectedAddressObj.name || "John Doe",
-            email: "johndoe@example.com",
-            contact: "9999999999",
-          },
-          theme: {
-            color: "#3399cc",
-          },
+    const options = {
+      key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+      amount,
+      currency,
+      name: "Mahaagromart",
+      description: "Order Payment",
+      order_id,
+      handler: async (response) => {
+        const paymentVerification = {
+          razorpay_payment_id: response.razorpay_payment_id,
+          razorpay_order_id: response.razorpay_order_id,
+          razorpay_signature: response.razorpay_signature,
         };
   
-        const razorpay = new window.Razorpay(options);
-        razorpay.on("payment.failed", (response) => {
-          console.error("Payment Failed:", response.error);
-          Swal.fire("Payment Failed!", "Please try again.", "error");
-        });
+        try {
+          const verifyResponse = await makeRequest(
+            "POST",
+            "Order/VerifyPayment",
+            paymentVerification,
+            {
+              headers: {
+                Authorization: `Bearer ${storedToken}`
+              }
+            }
+          );
   
-        razorpay.open();
-      } else {
-        Swal.fire("Failed to create order", "", "error");
-      }
-    } catch (error) {
-      console.error("Error Creating Order:", error);
-      Swal.fire("Something went wrong!", "Unable to place the order.", "error");
-    }
-  };
+          if (verifyResponse) {
+            for (const item of cartItems) {
+              await handleDeleteItem(item.varientsId, item.productId, item.minimumOrderQuantity);
+            }
+          } else {
+            Swal.fire("Payment Verification Failed! ❌", "", "error");
+          }
+        } catch (error) {
+          console.error("Error verifying payment:", error);
+          Swal.fire("Payment Verification Error", "", "error");
+        }
+      },
+      prefill: {
+        name: `${localStorage.getItem("firstName")} ${localStorage.getItem("lastName")}`,
+        email: "mahaagromart.com",
+        contact: selectedAddressObj.phoneNumber  ,
+      },
+      theme: {
+        color: "#3399cc",
+      },
+    };
   
-
+    const razorpay = new window.Razorpay(options);
+  
+    razorpay.on("payment.failed", (response) => {
+      console.error("Payment Failed:", response.error);
+      Swal.fire("Payment Failed!", "Please try again.", "error");
+    });
+  
+    razorpay.open();
+  } catch (error) {
+    console.error("Order creation error:", error);
+    Swal.fire("Something went wrong!", "Unable to place the order.", "error");
+  }
+};
 
   const handleDeleteItem = async (VARIENTS_ID, PROD_ID, Quantity) => {
     setDeletingId(VARIENTS_ID);
@@ -406,11 +497,7 @@ const Cart = () => {
             </h3>
           </div>
           <div className="mt-6 text-center">
-            <button
-               onClick={() => handlePlaceOrder(
-                addresses.find(addr => addr.id === selectedAddress), // selected address object
-                data // cart items (variants)
-              )}
+            <button onClick={() => handlePlaceOrder(addresses.find(addr => addr.id === selectedAddress),data )}
               disabled={!selectedAddress || data?.length === 0}
               className="bg-green-500 text-white px-8 py-3 rounded-md hover:bg-green-600 transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-1"
             >
