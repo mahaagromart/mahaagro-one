@@ -75,9 +75,15 @@ const Header = () => {
         fetchCartData(); // Fetch cart data on mount
 
         // Set up interval to periodically check cart count
+<<<<<<< HEAD
         const interval = setInterval(fetchCartData, 5000); // Check every 5 seconds
 
         return () => clearInterval(interval); // Clean up interval on unmount
+=======
+       // const interval = setInterval(fetchCartData, 5000); // Check every 5 seconds
+
+        // return () => clearInterval(interval); // Clean up interval on unmount
+>>>>>>> dac8d2866b52c5da2b4c043b1feb4d147d44dd32
     }, []);
 
     const handleSearchChange = (e) => {
@@ -161,7 +167,12 @@ const Header = () => {
                     >
                         <FaUser className="text-xl cursor-pointer hover:text-gray-700 transition" />
                         {isUserMenuOpen && (
+<<<<<<< HEAD
                             <div className="absolute right-0 w-20 bg-white shadow-md rounded-md z-50">
+=======
+                           <div className="absolute left-1/2 transform -translate-x-1/2 bg-white shadow-md text-center rounded-md z-50">
+
+>>>>>>> dac8d2866b52c5da2b4c043b1feb4d147d44dd32
                                 {user ? (
                                     <Link href="/profile" className="block px-4 py-2 text-gray-700 font-bold rounded-lg hover:bg-gray-100">
                                         Profile

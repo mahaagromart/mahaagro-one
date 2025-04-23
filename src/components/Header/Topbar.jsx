@@ -60,6 +60,7 @@ const Topbar = () => {
 
                 {/* Social Icons */}
                 <div className="flex space-x-4 mt-2 sm:mt-0">
+<<<<<<< HEAD
                     <a href="#" className="text-white hover:text-gray-400">
                         <FiFacebook size={20} />
                     </a>
@@ -70,6 +71,18 @@ const Topbar = () => {
                         <FiInstagram size={20} />
                     </a>
                     <a href="#" className="text-white hover:text-gray-400">
+=======
+                    <a href="https://www.facebook.com/profile.php?id=61554666101212" className="text-white hover:text-gray-400">
+                        <FiFacebook size={20} />
+                    </a>
+                    {/* <a href="#" className="text-white hover:text-gray-400">
+                        <FiTwitter size={20} />
+                    </a> */}
+                    <a href="https://www.facebook.com/profile.php?id=61554666101212" className="text-white hover:text-gray-400">
+                        <FiInstagram size={20} />
+                    </a>
+                    <a href="https://www.youtube.com/@mahaagromart" className="text-white hover:text-gray-400">
+>>>>>>> dac8d2866b52c5da2b4c043b1feb4d147d44dd32
                         <FiYoutube size={20} />
                     </a>
                 </div>

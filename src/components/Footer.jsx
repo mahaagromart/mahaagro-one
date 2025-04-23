@@ -2,7 +2,7 @@ import Image from 'next/image';
 import logo from '../../public/assets/images/img/footerlogo.webp';
 import barcode from '../../public/assets/images/img/qrcode.png';
 import iosIcon from '../../public/assets/images/img/secure.png';
-import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn } from 'react-icons/fa';
+import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn,FaYoutube } from 'react-icons/fa';
 import { FaPhoneAlt, FaMapMarkerAlt, FaEnvelope, FaClock,FaLock } from 'react-icons/fa'; // React icons
 
 const Footer = () => {
@@ -87,10 +87,10 @@ const Footer = () => {
                 <p className="text-sm text-gray-600">Secure Payment Gateway</p>
               </div>
               <div className="flex space-x-6 mt-6">
-                <a href="#" className="text-gray-600 hover:text-green-600 transition duration-300"><FaFacebookF className="text-xl" /></a>
-                <a href="#" className="text-gray-600 hover:text-green-600 transition duration-300"><FaTwitter className="text-xl" /></a>
-                <a href="#" className="text-gray-600 hover:text-green-600 transition duration-300"><FaInstagram className="text-xl" /></a>
-                <a href="#" className="text-gray-600 hover:text-green-600 transition duration-300"><FaLinkedinIn className="text-xl" /></a>
+                <a href="https://www.facebook.com/profile.php?id=61554666101212" className="text-gray-600 hover:text-green-600 transition duration-300"><FaFacebookF className="text-xl" /></a>
+                {/* <a href="#" className="text-gray-600 hover:text-green-600 transition duration-300"><FaTwitter className="text-xl" /></a> */}
+                <a href="https://www.instagram.com/maha_agromart/" className="text-gray-600 hover:text-green-600 transition duration-300"><FaInstagram className="text-xl" /></a>
+                <a href="https://www.youtube.com/@mahaagromart" className="text-gray-600 hover:text-green-600 transition duration-300"><FaYoutube className="text-xl" /></a>
               </div>
             </div>
           </div>

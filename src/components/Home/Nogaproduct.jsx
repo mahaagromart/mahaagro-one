@@ -137,7 +137,10 @@ export default function Nogaproduct() {
         >
           <FaArrowLeft className="text-green-300 hover:text-green-200 transition-colors duration-200" />
         </button>
+<<<<<<< HEAD
 
+=======
+>>>>>>> dac8d2866b52c5da2b4c043b1feb4d147d44dd32
         <div
           className="flex overflow-x-auto scrollbar-hide"
           ref={productContainerRef}

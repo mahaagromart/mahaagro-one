@@ -10,7 +10,8 @@ import { FaRupeeSign } from 'react-icons/fa';
 import { makeRequest } from '@/api';
 import Swal from 'sweetalert2';
 import parse from 'html-react-parser';
-import ReactImageMagnify from 'react-image-magnify';
+import axios from 'axios';
+import { devUseWarning } from 'antd/es/_util/warning';
 
 // Loading Component
 const Loader = () => (
@@ -58,8 +59,11 @@ export default function ProductViewPage() {
   const [availability, setAvailability] = useState(null);
   const [pincodeLoading, setPincodeLoading] = useState(false);
   const [showDeliveryDetails, setShowDeliveryDetails] = useState(false);
+  const [token, setToken] = useState('');
   const [deliverydata, setDeliveryData] = useState([]);
   const [deliveryCharges, setDeliveryCharges] = useState();
+
+
 
   function getDeliveryCharges(data) {
     if (!data) return 0;
@@ -80,37 +84,12 @@ export default function ProductViewPage() {
     const gst = totalDeliveryCharges * 0.18;
     return Math.round(totalDeliveryCharges + gst);
   }
+  function getDeliveryDatePlus8Days() {
+    const currentDate = new Date();
+    const futureDate = new Date(currentDate.getTime() + 8 * 24 * 60 * 60 * 1000);
+    return futureDate.toDateString();
+  }
 
-  const InsertInCart = (weight) => {
-    if (!weight || !product) return;
-    
-    const productToAdd = {
-      id: product.id,
-      name: product.name,
-      image: product.image,
-      price: weight.calculatedPrice,
-      originalPrice: weight.Maximum_retail_price,
-      weight: weight.label,
-      weightId: weight.varient_id,
-      quantity: quantity,
-      stock: weight.currentStock
-    };
-    
-    dispatch(addToCart(productToAdd));
-    
-    Swal.fire({
-      position: 'top-end',
-      icon: 'success',
-      title: 'Added to cart!',
-      showConfirmButton: false,
-      timer: 1500
-    });
-  };
-
-  const handleBuyNow = () => {
-    InsertInCart(selectedWeight);
-    router.push('/cart'); 
-  };
 
   const getProductDetails = async (productId) => {
     try {
@@ -136,6 +115,9 @@ export default function ProductViewPage() {
           return;
         }
 
+
+
+
         const weights = rawProduct.variants.$values.map((variant) => ({
           label: variant.varient_Name,
           varient_id: variant.varientS_ID,
@@ -156,6 +138,7 @@ export default function ProductViewPage() {
           weight: Number(variant.logistics.packagE_WEIGHT),
         }));
 
+        console.log(weights[0].Packagelength, weights[0].width, weights[0].height, weights[0].weight)
         const del = {
           length: weights[0].Packagelength,
           width: weights[0].width,
@@ -164,6 +147,7 @@ export default function ProductViewPage() {
         };
 
         setDeliveryData(del);
+
 
         const images = rawProduct.variants.$values[0].imageGallery?.$values?.map(img => img.product_Images) || [];
 
@@ -179,20 +163,91 @@ export default function ProductViewPage() {
         };
 
         setProduct(formattedProduct);
+
         setSelectedWeight(weights[0]);
         setQuantity(weights[0]?.minOrderQuantity || 1);
+
       } else {
         setNotFound(true);
       }
     } catch (error) {
       setError('Failed to fetch product details');
+
     } finally {
       setLoading(false);
     }
   };
 
+  const InsertInCart = async (selectedVariant) => {
+    try {
+      const storedToken = localStorage.getItem("authToken");
+      const userId = localStorage.getItem("userId");
+
+      if (!storedToken || !userId) {
+        Swal.fire({
+          title: "Login Required",
+          text: "Please login to add items to cart",
+          icon: "warning",
+          confirmButtonText: "OK",
+        });
+        return;
+      }
+
+      const response = await makeRequest(
+        'post',
+        '/Cart/InsertCartData',
+        { USERID: userId, VARIENTS_ID: selectedVariant.varient_id, PROD_ID: productId, Quantity: quantity },
+        { headers: { Authorization: `Bearer ${storedToken}` } }
+      );
+
+      if (response && response[0]?.code === 200) {
+        Swal.fire({
+          title: "Success",
+          text: "Product Added to the cart",
+          icon: "success",
+          confirmButtonText: "OK",
+        }).then(() => {
+          window.location.reload();
+        });
+      } else if (response && response[0]?.code === 409) {
+        Swal.fire({
+          title: "Product Already In Cart",
+          text: "Please Go to Cart",
+          icon: "warning",
+          confirmButtonText: "OK",
+        });
+      } else {
+        Swal.fire({
+          title: "Error",
+          text: "Failed to add item to cart",
+          icon: "error",
+          confirmButtonText: "OK",
+        });
+      }
+    } catch (error) {
+
+      Swal.fire({
+        title: "Error",
+        text: "Network Issue: Failed to add item to cart",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
+    }
+  };
+
+  const handleSubmitReview = (e) => {
+    e.preventDefault();
+    if (!newReview.name || !newReview.description) {
+      alert('Please provide both your name and a description for the review.');
+      return;
+    }
+    setNewReview({ name: '', description: '' });
+  };
+
+
   const handleWeightChange = (weight) => {
     setSelectedWeight(weight);
+
     setPincode("");
     setDeliveryData({
       length: weight.Packagelength,
@@ -203,7 +258,6 @@ export default function ProductViewPage() {
     setQuantity(weight.minOrderQuantity);
     setAvailability(null);
   };
-
   const nextImage = () => {
     setCurrentImageIndex((prev) => (prev === product.images.length - 1 ? 0 : prev + 1));
   };
@@ -216,22 +270,85 @@ export default function ProductViewPage() {
     router.push('/');
   };
 
+
+  const checkPincodeAvailability = async (pin) => {
+
+    if (pin.length !== 6 || !deliverydata) {
+      setAvailability(null);
+      return;
+    }
+    try {
+      const response = await makeRequest('get', `/Order/GetServiceAvailability?pincode=${pin}`);
+
+      if (response.retval === "SUCCESS") {
+        const charges = getDeliveryCharges(deliverydata);
+        setDeliveryCharges(charges);
+
+        setAvailability({
+          available: true,
+          deliveryDate: getDeliveryDatePlus8Days(),
+          deliveryCharge: deliveryCharges
+
+        });
+      } else {
+        setAvailability({
+          available: false,
+          message: 'Delivery not available for this pincode',
+        });
+      }
+    } catch (error) {
+      setAvailability({
+        available: false,
+        message: 'Error checking availability',
+      });
+    }
+  };
+  const handleBuyNow = () => {
+    InsertInCart(selectedWeight);
+    router.push('/cart');
+  };
+
+
+
   useEffect(() => {
+
     if (proD_ID) {
       getProductDetails(proD_ID);
     }
   }, [proD_ID]);
 
+
   useEffect(() => {
+
+    console.log(deliverydata)
     if (deliverydata.length > 0) {
       const charges = getDeliveryCharges(deliverydata);
       setDeliveryCharges(charges);
+
     }
-  }, [deliverydata]);
+  }, [deliverydata, deliveryCharges]);
+
+
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (pincode.length === 6) {
+        checkPincodeAvailability(pincode);
+      } else {
+        setAvailability(null);
+      }
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [pincode]);
 
   if (loading) return <Loader />;
   if (notFound) return <NotFoundPage onBackClick={handleBackToHome} />;
   if (error || !product) return <NotFoundPage onBackClick={handleBackToHome} />;
+
+  const imageSrc = product.image.startsWith('http')
+    ? product.image
+    : `${imageBaseUrl}${product.image}`;
 
   const currentImageSrc = product.images[currentImageIndex].startsWith('http')
     ? product.images[currentImageIndex]
@@ -240,79 +357,43 @@ export default function ProductViewPage() {
   return (
     <div className="container mx-auto p-4 font-poppins">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {/* Image Gallery Section */}
         <div className="relative">
-          <div className="flex flex-col md:flex-row gap-6">
-            {/* Thumbnail list */}
-            <div className="w-20 md:w-24 flex-shrink-0">
-              <div className="overflow-y-auto h-[400px]">
-                <ul className="space-y-2">
-                  {product.images.map((image, index) => (
-                    <li
-                      key={index}
-                      className={`cursor-pointer p-1 border rounded ${
-                        currentImageIndex === index
-                          ? 'border-green-500'
-                          : 'border-gray-200'
-                      }`}
-                      onClick={() => setCurrentImageIndex(index)}
-                    >
-                      <Image
-                        src={
-                          image.startsWith('http') ? image : `${imageBaseUrl}${image}`
-                        }
-                        alt={`Thumbnail ${index + 1}`}
-                        width={80}
-                        height={80}
-                        className="object-cover rounded"
-                      />
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-
-            {/* Main image section with zoom */}
-            <div className="relative flex-1 flex items-center justify-center">
+          <Image
+            src={currentImageSrc}
+            alt={product.name}
+            className="w-full max-h-[680px] object-cover border-2 rounded-lg border-gray-200 shadow-md p-2"
+            width={500}
+            height={680}
+            priority
+            onError={(e) => {
+              e.target.src = '/default-image.jpg';
+            }}
+          />
+          {product.images.length > 1 && (
+            <>
               <button
                 onClick={prevImage}
-                className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-gray-100 p-2 rounded-full shadow-md hover:bg-gray-200 z-10"
+                className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-gray-800 bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-75"
               >
-                ◀
+                ←
               </button>
-
-              <ReactImageMagnify
-                {...{
-                  smallImage: {
-                    alt: `Image ${currentImageIndex + 1}`,
-                    isFluidWidth: true,
-                    src: currentImageSrc,
-                  },
-                  largeImage: {
-                    src: currentImageSrc,
-                    width: 800,
-                    height: 800,
-                  },
-                  lensStyle: { backgroundColor: 'rgba(0,0,0,0.4)' },
-                  enlargedImageContainerStyle: { zIndex: 100 },
-                  enlargedImageContainerDimensions: {
-                    width: '127%',
-                    height: '100%',
-                  },
-                }}
-              />
-
               <button
                 onClick={nextImage}
-                className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-gray-100 p-2 rounded-full shadow-md hover:bg-gray-200 z-10"
+                className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-gray-800 bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-75"
               >
-                ▶
+                →
               </button>
-            </div>
-          </div>
+              <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
+                {product.images.map((_, index) => (
+                  <div
+                    key={index}
+                    className={`w-2 h-2 rounded-full ${currentImageIndex === index ? 'bg-white' : 'bg-gray-400'}`}
+                  />
+                ))}
+              </div>
+            </>
+          )}
         </div>
-
-        {/* Product Details Section */}
         <div className="space-y-4">
           <h1 className="text-3xl font-semibold text-black">{product.name}</h1>
           <div className="flex items-center space-x-2">
@@ -339,11 +420,10 @@ export default function ProductViewPage() {
                   <button
                     key={index}
                     onClick={() => handleWeightChange(weight)}
-                    className={`px-4 py-2 border rounded-md ${
-                      selectedWeight?.label === weight.label
+                    className={`px-4 py-2 border rounded-md ${selectedWeight?.label === weight.label
                         ? 'bg-green-500 text-white border-green-500'
                         : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100'
-                    }`}
+                      }`}
                   >
                     {weight.label}
                   </button>
@@ -373,25 +453,26 @@ export default function ProductViewPage() {
             </span>
           </div>
 
-          {/* Add to Cart and Buy Now Buttons */}
           <div className="flex space-x-4 mt-6 gap-4">
+
+
+
             <button
               onClick={() => InsertInCart(selectedWeight)}
-              className="flex items-center px-6 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
-            >
+              disabled={!availability?.available}
+              className={`flex items-center px-6 py-2 rounded-md ${availability?.available ? 'bg-green-500 hover:bg-green-600 text-white' : 'bg-gray-400 text-gray-200 cursor-not-allowed'}`}>
               <AiOutlineShoppingCart className="mr-2" />
               <span>Add to Cart</span>
             </button>
             <button
-              onClick={handleBuyNow}
-              className="flex items-center px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+              onClick={handleBuyNow} className={`flex items-center px-6 py-2 rounded-md ${availability?.available ? 'bg-green-500 hover:bg-green-600 text-white' : 'bg-gray-400 text-gray-200 cursor-not-allowed'}`}
             >
               <AiOutlineShoppingCart className="mr-2" />
               <span>Buy Now</span>
             </button>
           </div>
 
-          {/* Pincode section */}
+          {/* pincode section starts */}
           <div className="mt-6">
             <div className="p-4">
               <div className="flex flex-col md:flex-row gap-4">
@@ -407,7 +488,7 @@ export default function ProductViewPage() {
                     >
                       <path
                         fill="currentColor"
-                        d="M4.2 5.7c-.828 0-1.5-.805-1.5-1.5 0-.398.158-.78.44-1.06.28-.282.662-.44 1.06-.44.828 0 1.5.672 1.5 1.5 0 .398-.158.78-.44 1.06-.28.282-.662.44-1.06.44zm0-5.7C1.88 0 0 1.88 0 4.2 0 7.35 4.2 12 4.2 12s4.2-4.65 4.2-7.8C8.4 1.88 6.52 0 4.2 0z"
+                        d="M4.2 5.7c-.828 0-1.5-.672-1.5-1.5 0-.398.158-.78.44-1.06.28-.282.662-.44 1.06-.44.828 0 1.5.672 1.5 1.5 0 .398-.158.78-.44 1.06-.28.282-.662.44-1.06.44zm0-5.7C1.88 0 0 1.88 0 4.2 0 7.35 4.2 12 4.2 12s4.2-4.65 4.2-7.8C8.4 1.88 6.52 0 4.2 0z"
                         fillRule="evenodd"
                       />
                     </svg>
@@ -459,6 +540,7 @@ export default function ProductViewPage() {
                           <span className="mx-1">|</span>{' '}
                           <span>Delivery Charges <span className="text-green-600">- ₹{availability.deliveryCharge} </span> </span>{' '}
                           <span className="line-through text-gray-500 ml-1">{availability.originalCharge}</span>
+
                         </div>
                       ) : (
                         <div className="text-red-500 text-sm">{availability.message}</div>
@@ -512,6 +594,7 @@ export default function ProductViewPage() {
               )}
             </div>
           </div>
+          {/* pincode section ends */}
 
           <div className="mt-6 border-t border-gray-300 pt-4">
             <div className="flex items-center space-x-2">
