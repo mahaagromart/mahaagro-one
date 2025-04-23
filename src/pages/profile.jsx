@@ -62,6 +62,7 @@ export default function Profile() {
     try {
       const response = await makeRequest("POST", "/Authentication/GetUserProfile", {}, { headers: { Authorization: `Bearer ${storedToken}` } });
       if (response && response.userProfilesEntity?.$values?.length > 0) {
+        console.log(response)
         const profileData = response.userProfilesEntity.$values[0];
         setUserProfile({
           profileImage: profileData.profileImage || '',
@@ -86,18 +87,13 @@ export default function Profile() {
     if (!user) {
       router.push("/login");
     }else{
-      GetCartData();
       GetUserProfile();
+      GetCartData();
 
     }
   }, []);
 
-  // Format joining date
-  const formatJoiningDate = (dateString) => {
-    if (!dateString) return '';
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-  };
+
 
   // Calculate total price and quantity
   const totalQuantity = cartData?.reduce((total, item) => total + (item.minimumOrderQuantity || 0), 0) || 0;
@@ -246,7 +242,8 @@ export default function Profile() {
                       <img
                         src={`${imageBaseUrl}${userProfile.profileImage}`}
                         alt="Profile"
-                        className="h-full w-full object-cover"
+                        className="h-full w-auto rounded-full bg-pink-200 shadow-lg flex items-center justify-center text-pink-800 font-semibold"
+
                       />
                     ) : (
                       <div className="h-full w-full bg-purple-100 flex items-center justify-center text-purple-600 text-2xl font-bold">
@@ -263,7 +260,7 @@ export default function Profile() {
                 </div>
 
                 <div className="mb-6 text-sm">
-                  <p className="text-gray-600 mb-1">Member since: {formatJoiningDate(userProfile.joiningDate)}</p>
+                  <p className="text-gray-600 mb-1">Member since: {userProfile.joiningDate}</p>
                   <p className="text-gray-600">{userProfile.cityName}, {userProfile.stateName}, {userProfile.countryName}</p>
                 </div>
 
@@ -532,7 +529,7 @@ export default function Profile() {
                     <div>
                       <h3 className="font-medium text-gray-800">Account Details</h3>
                       <p className="text-gray-600 mt-1">Role: {userProfile.designationName}</p>
-                      <p className="text-gray-600">Member since: {formatJoiningDate(userProfile.joiningDate)}</p>
+                      <p className="text-gray-600">Member since: {userProfile.joiningDate}</p>
                     </div>
                   </div>
                 </div>

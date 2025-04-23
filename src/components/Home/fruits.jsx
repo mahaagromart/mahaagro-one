@@ -55,7 +55,7 @@ export default function fruits() {
     };
 
     useEffect(() => {
- 
+
     }, [products]);
 
     const productContainerRef = useRef(null);
@@ -91,10 +91,10 @@ export default function fruits() {
             </div>
             <div className="relative">
                 <button
-                    className="absolute top-1/2 left-0 transform -translate-y-1/2 bg-white border border-gray-300 rounded-full p-2 shadow-lg z-10 opacity-60"
+                    className="absolute top-1/2 left-[-12px] transform -translate-y-1/2 bg-red-900 border border-gray-300 rounded-full p-2 shadow-lg z-10 opacity-80 hover:opacity-100 transition"
                     onClick={() => productContainerRef.current.scrollBy({ left: -300, behavior: 'smooth' })}
                 >
-                    <FaArrowLeft />
+                    <FaArrowLeft className="text-green-300 hover:text-green-200 transition-colors duration-200" />
                 </button>
                 <div
                     className="flex overflow-x-auto scrollbar-hide"
@@ -180,11 +180,12 @@ export default function fruits() {
                         </div>
                     ))}
                 </div>
+
                 <button
-                    className="absolute top-1/2 right-0 transform -translate-y-1/2 bg-white border border-gray-300 rounded-full p-2 shadow-lg z-10 opacity-60"
+                    className="absolute top-1/2 right-[-12px] transform -translate-y-1/2 bg-red-900 border border-gray-300 rounded-full p-2 shadow-lg z-10 opacity-80 hover:opacity-100 transition"
                     onClick={() => productContainerRef.current.scrollBy({ left: 300, behavior: 'smooth' })}
                 >
-                    <FaArrowRight />
+                    <FaArrowRight className="text-green-400 hover:text-green-600 transition-colors duration-200" />
                 </button>
             </div>
             <style jsx>{`

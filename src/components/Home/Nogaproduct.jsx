@@ -16,23 +16,23 @@ export default function Nogaproduct() {
   const GetNogaProduct = async () => {
     try {
       const storedToken = localStorage.getItem("authToken");
-      const response = await makeRequest("POST","/Product/GetProductBycategory",{ Id: 1 },{ headers: { Authorization: `Bearer ${storedToken}` } });
-    
-      
+      const response = await makeRequest("POST", "/Product/GetProductBycategory", { Id: 1 }, { headers: { Authorization: `Bearer ${storedToken}` } });
+
+
 
 
       // Map API data to the component's product structure
       const mappedProducts = response.dataset.$values.map((item) => {
         const variant = item.variants.$values[0];
         const originalPrice = parseFloat(variant.pricing.maximuM_RETAIL_PRICE);
-        const discountAmount = parseFloat(variant.pricing.discounT_AMOUNT || "0"); 
+        const discountAmount = parseFloat(variant.pricing.discounT_AMOUNT || "0");
         const discountedPrice = parseFloat(variant.pricing.calculateD_PRICE);
 
         // Calculate discount percentage
         const discountPercentage = discountAmount ? Math.round((discountAmount / originalPrice) * 100) : 0;
 
         return {
-          id: item.proD_ID, 
+          id: item.proD_ID,
           category: item.categorY_ID === "1" ? "NOGA" : "Unknown",
           name: item.product_Name,
           image: `${imageBaseUrl}${item.thumbnailImage}`, // Store full URL here
@@ -126,16 +126,16 @@ export default function Nogaproduct() {
     <div className="container mx-auto p-4 font-poppins">
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-xl md:text-2xl font-bold">Noga Product</h1>
-        <Link href="#" className="flex items-center text-green-700 hover:text-green-900">
+        <Link href="/Category?category_id=1" className="flex items-center text-green-700 hover:text-green-900">
           View All <FaArrowRight className="ml-2" />
         </Link>
       </div>
       <div className="relative">
         <button
-          className="absolute top-1/2 left-0 transform -translate-y-1/2 bg-white border border-gray-300 rounded-full p-2 shadow-lg z-10 opacity-60"
-          onClick={() => productContainerRef.current.scrollBy({ left: -300, behavior: "smooth" })}
+          className="absolute top-1/2 left-[-12px] transform -translate-y-1/2 bg-red-900 border border-gray-300 rounded-full p-2 shadow-lg z-10 opacity-80 hover:opacity-100 transition"
+          onClick={() => productContainerRef.current.scrollBy({ left: -300, behavior: 'smooth' })}
         >
-          <FaArrowLeft />
+          <FaArrowLeft className="text-green-300 hover:text-green-200 transition-colors duration-200" />
         </button>
         <div
           className="flex overflow-x-auto scrollbar-hide"
@@ -185,8 +185,8 @@ export default function Nogaproduct() {
                         key={weight.label}
                         onClick={() => handleWeightChange(weight, product.id)}
                         className={`px-2 py-1 text-xs md:px-3 md:py-1 rounded-full border ${product.selectedWeight.label === weight.label
-                            ? "bg-green-700 text-white"
-                            : "bg-green-200"
+                          ? "bg-green-700 text-white"
+                          : "bg-green-200"
                           }`}
                       >
                         {weight.label}
@@ -224,10 +224,10 @@ export default function Nogaproduct() {
           ))}
         </div>
         <button
-          className="absolute top-1/2 right-0 transform -translate-y-1/2 bg-white border border-gray-300 rounded-full p-2 shadow-lg z-10 opacity-60"
-          onClick={() => productContainerRef.current.scrollBy({ left: 300, behavior: "smooth" })}
+          className="absolute top-1/2 right-[-12px] transform -translate-y-1/2 bg-red-900 border border-gray-300 rounded-full p-2 shadow-lg z-10 opacity-80 hover:opacity-100 transition"
+          onClick={() => productContainerRef.current.scrollBy({ left: 300, behavior: 'smooth' })}
         >
-          <FaArrowRight />
+          <FaArrowRight className="text-green-400 hover:text-green-600 transition-colors duration-200" />
         </button>
       </div>
       <style jsx>{`

@@ -100,7 +100,7 @@
 //   //     // if (response && response[0]?.retval === "SUCCESS") {
 //   //     //  window.location.reload();
 //   //     if(response[0].code == 200  ){
-        
+
 //   //       Swal.fire({
 //   //         title: "Success",
 //   //         text: "Product Added to the cart",
@@ -145,7 +145,7 @@
 
 //   // const InsertInCart = async (selectedVariant) => {
 //   //   const storedToken = localStorage.getItem("authToken");
-  
+
 //   //   if (!storedToken) {
 //   //     Swal.fire({
 //   //       title: "Please Login",
@@ -157,10 +157,10 @@
 //   //     });
 //   //     return;
 //   //   }
-  
+
 //   //   try {
 //   //     const userId = localStorage.getItem("userId");
-  
+
 //   //     const response = await makeRequest(
 //   //       'post',
 //   //       '/Cart/InsertCartData',
@@ -174,7 +174,7 @@
 //   //         headers: { Authorization: `Bearer ${storedToken}` }
 //   //       }
 //   //     );
-  
+
 //   //     console.log({
 //   //       USERID: userId,
 //   //       VARIENTS_ID: selectedVariant.varient_id,
@@ -182,7 +182,7 @@
 //   //       Quantity: quantity
 //   //     });
 //   //     console.log(response);
-  
+
 //   //     if (response[0].code === 200) {
 //   //       Swal.fire({
 //   //         title: "Success",
@@ -192,7 +192,7 @@
 //   //       }).then(() => {
 //   //         window.location.reload();
 //   //       });
-  
+
 //   //     } else if (response[0].code === 409) {
 //   //       Swal.fire({
 //   //         title: "Product Already In Cart",
@@ -202,7 +202,7 @@
 //   //       }).then(() => {
 //   //         // TODO: DISPATCH to CART 
 //   //       });
-  
+
 //   //     } else {
 //   //       Swal.fire({
 //   //         title: "Error",
@@ -211,7 +211,7 @@
 //   //         confirmButtonText: "OK",
 //   //       });
 //   //     }
-  
+
 //   //   } catch (error) {
 //   //     console.error("InsertCart error:", error);
 //   //     Swal.fire({
@@ -222,7 +222,7 @@
 //   //     });
 //   //   }
 //   // };
-  
+
 
 //   const InsertInCart = async (selectedVariant) => {
 //   const storedToken = localStorage.getItem("authToken");
@@ -524,7 +524,7 @@
 //   const [showDeliveryDetails, setShowDeliveryDetails] = useState(false);
 //   const [token,setToken]=useState('')
 
-  
+
 //   const clinet_ID = process.env.NEXT_PRIVATE_CLIENT_ID ;
 
 
@@ -545,7 +545,7 @@
 //         const rawProduct = response.dataset.$values[0];
 //         setDescription(rawProduct.product_Description);
 //         setProductId(rawProduct.proD_ID);
-       
+
 //         if (!rawProduct.variants?.$values || rawProduct.variants.$values.length === 0) {
 //           setNotFound(true);
 //           return;
@@ -568,7 +568,7 @@
 //         }));
 
 //         const images = rawProduct.variants.$values[0].imageGallery?.$values?.map(img => img.product_Images) || [];
-       
+
 //         const formattedProduct = {
 //           id: rawProduct.proD_ID,
 //           name: rawProduct.product_Name,
@@ -683,7 +683,7 @@
 //       setAvailability(null);
 //       return;
 //     }
-  
+
 //     setPincodeLoading(true);
 //     try {
 //       // Simulate API call - replace with your actual API endpoint
@@ -692,7 +692,7 @@
 //         '/Delivery/CheckPincode', 
 //         { pincode: pin, productId: productId }
 //       );
-  
+
 //       if (response?.available) {
 //         setAvailability({
 //           available: true,
@@ -737,19 +737,19 @@
 //         setAvailability(null);
 //       }
 //     }, 500);
-  
+
 //     return () => clearTimeout(timer);
 //   }, [pincode]);
 
 
 
-  
+
 // // sending the data of user
 
 // const getToken = async () => {
 //   try {
 //     const tokenUrl = `https://app.elite.ekartlogistics.in/integrations/v2/auth/token/${import.meta.env.VITE_NEXT_DATA}`;
-    
+
 //     const response = await axios.post(tokenUrl,{
 //       username:`${import.meta.env.NEXT_USERNAME}`,
 //       password:`${import.meta.env.NEXT_PASSWORD}`
@@ -757,8 +757,8 @@
 //     console.log(response)
 //     setToken(response.data.access_token)
 
-   
-    
+
+
 
 //   } catch (error) {
 //     console.error('Error fetching token:', error);
@@ -773,25 +773,25 @@
 //      const checkAvailability = async (pin) => {
 
 //     try {
-     
+
 //         const res = await axios.get(`https://app.elite.ekartlogistics.in/api/v2/serviceability/${pin}`, {
 //           headers: {
 //             Authorization: `Bearer ${token}`
 //           }
 //         });
-        
-    
-      
-   
+
+
+
+
 //       console.log(res.data.status)
 //       setAvailability(res.data.status==true ? '✅ Available' : '❌ Not Available');
 //     } catch (err) {
 //       setAvailability('⚠️ Error checking availability');
 //     } finally {
-     
+
 //     }
 //   };
-  
+
 
 //   if (loading) return <Loader />;
 //   if (notFound) return <NotFoundPage onBackClick={handleBackToHome} />;
@@ -918,7 +918,7 @@
 //               <span>Buy Now</span>
 //             </button>
 //           </div>
-  
+
 
 // {/* pincode section starts */}
 // <div className="mt-6">
@@ -1041,7 +1041,7 @@
 //         </div>
 //       </div>
 
-      
+
 //     </div>
 
 //     {/* Delivery Details Dropdown */}
@@ -1172,60 +1172,35 @@ export default function ProductViewPage() {
   const [pincodeLoading, setPincodeLoading] = useState(false);
   const [showDeliveryDetails, setShowDeliveryDetails] = useState(false);
   const [token, setToken] = useState('');
-  const [deliverydata , setDeliveryData] = useState([]);
-  const [deliveryCharges , setDeliveryCharges] = useState();
+  const [deliverydata, setDeliveryData] = useState([]);
+  const [deliveryCharges, setDeliveryCharges] = useState();
 
-//   function getDeliveryCharges(data) {
-//     debugger
-//     console.log(data)
-//     let totalDeliveryCharges = 0;
 
-//     let volWeight = (parseFloat(data.length) * parseFloat(data.width) * parseFloat(data.height)) / 5000;
-//     let weight = parseFloat(data.weight);
 
-//     let finalWeight = Math.max(volWeight, weight);
+  function getDeliveryCharges(data) {
+    if (!data) return 0;
+    let totalDeliveryCharges = 0;
+    const volWeight = (data.length * data.width * data.height) / 5000;
+    const finalWeight = Math.max(volWeight, data.weight);
 
-//     const baseCharge = 90;
+    const baseCharge = 90;
 
-//     if (finalWeight <= 2000) {
-//         totalDeliveryCharges = baseCharge;
-//     } else {
-//         let additionalWeight = finalWeight - 2000;
-//         let additionalKg = Math.ceil(additionalWeight / 1000);
-//         totalDeliveryCharges = baseCharge + (additionalKg * 35);
-//     }
+    if (finalWeight <= 2000) {
+      totalDeliveryCharges = baseCharge;
+    } else {
+      const additionalWeight = finalWeight - 2000;
+      const additionalKg = Math.ceil(additionalWeight / 1000);
+      totalDeliveryCharges = baseCharge + (additionalKg * 35);
+    }
 
-//     let gst = totalDeliveryCharges * 0.18;
-
-//     totalDeliveryCharges += gst;
-
-//     return Math.round(totalDeliveryCharges);
-// }
-
-function getDeliveryCharges(data) {
-  if (!data) return 0; 
-  let totalDeliveryCharges = 0;
-  const volWeight = (data.length * data.width * data.height) / 5000;
-  const finalWeight = Math.max(volWeight, data.weight);
-
-  const baseCharge = 90;
-  
-  if (finalWeight <= 2000) {
-    totalDeliveryCharges = baseCharge;
-  } else {
-    const additionalWeight = finalWeight - 2000;
-    const additionalKg = Math.ceil(additionalWeight / 1000);
-    totalDeliveryCharges = baseCharge + (additionalKg * 35);
+    const gst = totalDeliveryCharges * 0.18;
+    return Math.round(totalDeliveryCharges + gst);
   }
-
-  const gst = totalDeliveryCharges * 0.18;
-  return Math.round(totalDeliveryCharges + gst);
-}
-function getDeliveryDatePlus8Days() {
-  const currentDate = new Date();
-  const futureDate = new Date(currentDate.getTime() + 8 * 24 * 60 * 60 * 1000);
-  return futureDate.toDateString(); 
-}
+  function getDeliveryDatePlus8Days() {
+    const currentDate = new Date();
+    const futureDate = new Date(currentDate.getTime() + 8 * 24 * 60 * 60 * 1000);
+    return futureDate.toDateString();
+  }
 
 
   const getProductDetails = async (productId) => {
@@ -1246,14 +1221,14 @@ function getDeliveryDatePlus8Days() {
 
         setDescription(rawProduct.product_Description);
         setProductId(rawProduct.proD_ID);
-       
+
         if (!rawProduct.variants?.$values || rawProduct.variants.$values.length === 0) {
           setNotFound(true);
           return;
         }
 
- 
-   
+
+
 
         const weights = rawProduct.variants.$values.map((variant) => ({
           label: variant.varient_Name,
@@ -1269,25 +1244,25 @@ function getDeliveryDatePlus8Days() {
           minOrderQuantity: Number(variant.pricing.minimuM_ORDER_QUANTITY),
           previousPrice: Number(variant.pricing.pricing),
           DiscountAmount: Number(variant.pricing.discounT_AMOUNT),
-          Packagelength : Number(variant.logistics.packagE_LENGTH),
-          width : Number(variant.logistics.packagE_WIDTH),
-          height : Number(variant.logistics.packagE_HEIGHT),
-          weight : Number(variant.logistics.packagE_WEIGHT),
+          Packagelength: Number(variant.logistics.packagE_LENGTH),
+          width: Number(variant.logistics.packagE_WIDTH),
+          height: Number(variant.logistics.packagE_HEIGHT),
+          weight: Number(variant.logistics.packagE_WEIGHT),
         }));
-   
-        console.log(weights[0].Packagelength, weights[0].width,weights[0].height, weights[0].weight)
+
+        console.log(weights[0].Packagelength, weights[0].width, weights[0].height, weights[0].weight)
         const del = {
           length: weights[0].Packagelength,
           width: weights[0].width,
           height: weights[0].height,
           weight: weights[0].weight
-      };
+        };
 
         setDeliveryData(del);
-        
+
 
         const images = rawProduct.variants.$values[0].imageGallery?.$values?.map(img => img.product_Images) || [];
-       
+
         const formattedProduct = {
           id: rawProduct.proD_ID,
           name: rawProduct.product_Name,
@@ -1300,16 +1275,16 @@ function getDeliveryDatePlus8Days() {
         };
 
         setProduct(formattedProduct);
-      
+
         setSelectedWeight(weights[0]);
         setQuantity(weights[0]?.minOrderQuantity || 1);
-    
+
       } else {
         setNotFound(true);
       }
     } catch (error) {
       setError('Failed to fetch product details');
-  
+
     } finally {
       setLoading(false);
     }
@@ -1409,23 +1384,23 @@ function getDeliveryDatePlus8Days() {
 
 
   const checkPincodeAvailability = async (pin) => {
-    
+
     if (pin.length !== 6 || !deliverydata) {
       setAvailability(null);
       return;
     }
     try {
       const response = await makeRequest('get', `/Order/GetServiceAvailability?pincode=${pin}`);
-  
+
       if (response.retval === "SUCCESS") {
-        const charges = getDeliveryCharges(deliverydata); 
+        const charges = getDeliveryCharges(deliverydata);
         setDeliveryCharges(charges);
-  
+
         setAvailability({
           available: true,
           deliveryDate: getDeliveryDatePlus8Days(),
           deliveryCharge: deliveryCharges
-      
+
         });
       } else {
         setAvailability({
@@ -1442,13 +1417,13 @@ function getDeliveryDatePlus8Days() {
   };
   const handleBuyNow = () => {
     InsertInCart(selectedWeight);
-    router.push('/cart'); 
+    router.push('/cart');
   };
 
 
 
   useEffect(() => {
-    
+
     if (proD_ID) {
       getProductDetails(proD_ID);
     }
@@ -1461,11 +1436,11 @@ function getDeliveryDatePlus8Days() {
     if (deliverydata.length > 0) {
       const charges = getDeliveryCharges(deliverydata);
       setDeliveryCharges(charges);
-  
+
     }
-  }, [deliverydata,deliveryCharges]);
-  
-  
+  }, [deliverydata, deliveryCharges]);
+
+
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -1475,7 +1450,7 @@ function getDeliveryDatePlus8Days() {
         setAvailability(null);
       }
     }, 500);
-  
+
     return () => clearTimeout(timer);
   }, [pincode]);
 
@@ -1557,11 +1532,10 @@ function getDeliveryDatePlus8Days() {
                   <button
                     key={index}
                     onClick={() => handleWeightChange(weight)}
-                    className={`px-4 py-2 border rounded-md ${
-                      selectedWeight?.label === weight.label
+                    className={`px-4 py-2 border rounded-md ${selectedWeight?.label === weight.label
                         ? 'bg-green-500 text-white border-green-500'
                         : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100'
-                    }`}
+                      }`}
                   >
                     {weight.label}
                   </button>
@@ -1592,16 +1566,18 @@ function getDeliveryDatePlus8Days() {
           </div>
 
           <div className="flex space-x-4 mt-6 gap-4">
+
+
+
             <button
               onClick={() => InsertInCart(selectedWeight)}
-              className="flex items-center px-6 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
-            >
+              disabled={!availability?.available}
+              className={`flex items-center px-6 py-2 rounded-md ${availability?.available ? 'bg-green-500 hover:bg-green-600 text-white' : 'bg-gray-400 text-gray-200 cursor-not-allowed'}`}>
               <AiOutlineShoppingCart className="mr-2" />
               <span>Add to Cart</span>
             </button>
             <button
-              onClick={handleBuyNow}
-              className="flex items-center px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+              onClick={handleBuyNow} className={`flex items-center px-6 py-2 rounded-md ${availability?.available ? 'bg-green-500 hover:bg-green-600 text-white' : 'bg-gray-400 text-gray-200 cursor-not-allowed'}`}
             >
               <AiOutlineShoppingCart className="mr-2" />
               <span>Buy Now</span>
@@ -1658,7 +1634,7 @@ function getDeliveryDatePlus8Days() {
                     )}
 
                     {pincode.length === 6 && !pincodeLoading && (
-                      <button 
+                      <button
                         className="absolute right-3 text-blue-600 text-sm font-medium"
                         onClick={() => setPincode('')}
                       >
@@ -1676,7 +1652,7 @@ function getDeliveryDatePlus8Days() {
                           <span className="mx-1">|</span>{' '}
                           <span>Delivery Charges <span className="text-green-600">- ₹{availability.deliveryCharge} </span> </span>{' '}
                           <span className="line-through text-gray-500 ml-1">{availability.originalCharge}</span>
-                        
+
                         </div>
                       ) : (
                         <div className="text-red-500 text-sm">{availability.message}</div>
