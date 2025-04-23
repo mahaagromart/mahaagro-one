@@ -24,11 +24,7 @@ export default function Bannereleven() {
             Shop smarter with Mahaagromart. Get it now on your phone!
           </p>
           <div className="flex justify-center space-x-8">
-<<<<<<< HEAD
-            <a href="" target="_blank">
-=======
             <a href="https://apps.apple.com/ca/app/maha-agro/id6473010775" target="_blank">
->>>>>>> dac8d2866b52c5da2b4c043b1feb4d147d44dd32
               <Image
                 src={Apple}
                 alt="App Store"
@@ -37,11 +33,7 @@ export default function Bannereleven() {
                 className="rounded-full border-2 border-green-600 shadow-lg transition-transform duration-300 hover:scale-110"
               />
             </a>
-<<<<<<< HEAD
-            <a href="" target="_blank">
-=======
             <a href="https://play.google.com/store/search?q=mahaagromart&c=apps&hl=en" target="_blank">
->>>>>>> dac8d2866b52c5da2b4c043b1feb4d147d44dd32
               <Image
                 src={Playstore}
                 alt="Play Store"
