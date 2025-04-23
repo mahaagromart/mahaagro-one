@@ -314,7 +314,7 @@ export default function Profile() {
                   <button className="flex items-center space-x-3 px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-lg font-medium w-full text-left"
                     onClick={()=>{
 
-                      dispatch(logout()); 
+                      dispatch(logout());
                       window.location.reload();
                     }}
                   >
