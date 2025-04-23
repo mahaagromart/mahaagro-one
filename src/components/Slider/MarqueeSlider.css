@@ -1,0 +1,18 @@
+/* Ensure all items stay in a single line and scroll */
+.rt-marquee {
+    display: flex; /* This makes the items align horizontally */
+    white-space: nowrap; /* Prevents wrapping of text/items */
+    animation: marquee 20s linear infinite; /* Continuous scrolling animation */
+  }
+  
+
+  /* The actual animation for scrolling */
+  @keyframes marquee {
+    0% {
+      transform: translateX(100%); /* Start from the right */
+    }
+    100% {
+      transform: translateX(-100%); /* End at the left */
+    }
+  }
+  

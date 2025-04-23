@@ -1,0 +1,288 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+  /* @media (prefers-color-scheme: dark) {
+    :root {
+      --background: #0a0a0a;
+      --foreground: #ededed;
+    }
+  } */
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: 'Poppins', sans-serif;
+}
+
+
+
+/* -----------------Navbar.module.css--------------- */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f0f0f0; /* Set your desired background color */
+  padding: 1rem 2rem;
+}
+
+.navList {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.navItem {
+  margin-right: 1rem;
+}
+
+.navItem a {
+  color: #333;
+  text-decoration: none;
+}
+
+.rightSection {
+  display: flex;
+  align-items: center;
+}
+
+.discount {
+  margin-right: 1rem;
+  background-color: #fdd; /* Set your desired color */
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+}
+
+.hotline {
+  display: flex;
+  align-items: center;
+}
+
+.hotline span {
+  margin-right: 0.5rem;
+}
+
+.hotline a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+
+/* -----------------Header.module.css--------------- */
+
+/* Basic container style for categories dropdown */
+.categories-dropdown {
+  position: relative;
+  display: none; /* Initially hidden */
+}
+
+/* When hovering over the parent container, make the dropdown visible */
+.categories-dropdown:hover .dropdown-menu {
+  display: block;
+  opacity: 1;
+}
+
+/* Button styles */
+.dropdown-btn {
+  display: flex;
+  align-items: center;
+  padding: 9px 20px;
+  background-color: #f7f7f7;
+  border-radius: 34px;
+  font-size: 20px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+  border: 2px solid #ccc; /* Add a border */
+}
+
+.dropdown-btn:hover {
+  background-color: #e2e2e2;
+  color: #4a4a4a;
+}
+
+.dropdown-text {
+  padding-right: 10px;
+  font-size: 15px;
+  margin-left: 5px;
+  font-family: "Poppins", sans-serif;
+}
+
+/* Dropdown menu styles */
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background-color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+  border: 2px solid #ccc;  /* Add a border to the dropdown */
+  display: none;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+  z-index: 100;  /* Ensures the dropdown appears above other elements */
+}
+
+/* Dropdown item styles */
+.dropdown-item {
+  display: flex;
+  padding: 4px 8px;
+  font-size: 14px;
+  cursor: pointer;
+  gap: 8px;
+  transition: background-color 0.3s;
+  border-bottom: 1px solid #ccc;  /* Add a bottom border for separation */
+}
+.bottom {
+
+  margin-top: 5px;
+}
+.bottom:hover {
+  font: bold;
+  background-color: #e2e2e2;
+  color: #035728;
+}
+/* Optional: Remove the bottom border for the last item */
+.dropdown-item:last-child {
+  border-bottom: none;
+}
+
+.dropdown-item:hover {
+  background-color: #e2e2e2;
+}
+
+.dropdown-arrow{
+  font-size: large;
+  margin-top: 5px;
+;
+}
+/* Media query for screens larger than 1440px */
+@media (min-width: 1440px) {
+  .categories-dropdown {
+      display: block; /* Show the dropdown on larger screens */
+  }
+}
+ /* -----------------Google.module.css--------------- */
+ .VIpgJd-ZVi9od-ORHb {
+  display: none;
+}
+.VIpgJd-ZVi9od-ORHb-OEVmcd {
+  left: 0;
+  display: none;
+  top: 0;
+  position: relative;
+  
+  z-index: 10000001;
+  position: relative;
+  border: none;
+  border-bottom: 1px solid #6B90DA;
+  margin: 0;
+  box-shadow: 0 0 8px 1px #999;
+}
+.goog-te-gadget img {
+  display: none;
+}
+.goog-te-gadget-simple {
+  border-radius: 18px;
+}
+.translated-ltr{
+  margin-top: -40px;
+}
+ /* -----------------Marqueeslider.module.css--------------- */
+ /* Ensure all items stay in a single line and scroll */
+.rt-marquee {
+  display: flex; /* This makes the items align horizontally */
+  white-space: nowrap; /* Prevents wrapping of text/items */
+  animation: marquee 20s linear infinite; /* Continuous scrolling animation */
+}
+
+
+/* The actual animation for scrolling */
+@keyframes marquee {
+  0% {
+    transform: translateX(100%); /* Start from the right */
+  }
+  100% {
+    transform: translateX(-100%); /* End at the left */
+  }
+}
+ /* -----------------Banner.module.css--------------- */
+ /* Wrapper for the animated border effect */
+.example-5 {
+  position: relative;
+  overflow: hidden; /* Ensures the SVG border stays within the image container */
+  transition: transform 0.3s ease-out; /* Optional: smooth transition for 3D effect */
+}
+
+/* Bold Border */
+.example-5.bold-border .line {
+  stroke-width: 6px; /* Bold border */
+}
+
+/* Create the animated border */
+.example-5 svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; /* Prevents the border from interfering with interactions */
+  opacity: 0; /* Initially hide the border */
+  transition: opacity 0.3s ease-in-out; /* Smooth fade-in of the border */
+}
+
+/* Only animate the border when the container is hovered */
+.example-5:hover svg {
+  opacity: 1; /* Show the SVG border */
+}
+
+/* Default dashed border styling */
+.example-5 .line {
+  stroke-dasharray: 800; /* Set the stroke length to match the path's length */
+  stroke-width: 2px; /* Default border thickness */
+  fill: transparent;
+  stroke: rgba(78, 255, 13, 0.3); /* Green color with some transparency */
+  animation: svgAnimation 3.5s linear infinite; /* Animation triggered on hover */
+}
+
+/* Define the animation for the border */
+@keyframes svgAnimation {
+  0% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: 1000; /* Moves the dashed line to simulate movement */
+  }
+}
+
+/* Optional: Adding hover effects to stop animation and change color */
+.example-5:hover .line {
+  stroke: rgb(2, 158, 54); /* Change the color to red when hovered */
+  animation-play-state: running; /* Ensure the animation runs when hovered */
+  stroke-width: 6px; /* Optionally increase the stroke width on hover */
+}
+
+/* swiper */
+.custom-swiper .swiper-pagination {
+  position: relative;
+  margin-top: 12px; /* Adjust the gap as needed */
+}
+
+.custom-swiper .swiper-pagination-bullet {
+  width: 10px;
+  height: 10px;
+  background-color: #000; /* Customize bullet color */
+  opacity: 0.5;
+  margin: 0 5px;
+}
+
+.custom-swiper .swiper-pagination-bullet-active {
+  opacity: 1;
+  background-color: #000; /* Customize active bullet color */
+}
